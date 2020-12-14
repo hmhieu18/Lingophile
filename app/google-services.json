@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "133174020310",
+    "project_id": "lingophile-3d44f",
+    "storage_bucket": "lingophile-3d44f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:133174020310:android:85041af3986be8e3e4a177",
+        "android_client_info": {
+          "package_name": "com.example.lingophile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "133174020310-2pl310mglm7vjv5hnvdr23983m0511cd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQWTtDIuqaUdbxAvihN-0Zae1iLaabBTw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "133174020310-2pl310mglm7vjv5hnvdr23983m0511cd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
