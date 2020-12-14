@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_garden"
+        android:icon="@drawable/ic_new_lesson"
+        android:title="New lesson" />
+    <item
+        android:id="@+id/navigation_add_plant"
+        android:icon="@drawable/ic_search"
+        android:title="Search" />
+    <item
+        android:id="@+id/navigation_schedule"
+        android:icon="@drawable/ic_home"
+        android:title="My List" />
+    <item
+        android:id="@+id/navigation_camera"
+        android:icon="@drawable/ic_calendar"
+        android:title="Calendar" />
+    <item
+        android:id="@+id/navigation_setting"
+        android:icon="@drawable/ic_setting"
+        android:title="Settings" />
+</menu>
