@@ -1,14 +1,16 @@
-package com.example.lingophile;
+package com.example.lingophile.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class LoginFormActivity extends AppCompatActivity {
+import com.example.lingophile.R;
+
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_form);
+        setContentView(R.layout.activity_main);
     }
 }

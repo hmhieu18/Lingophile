@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterFromActivity">
+    android:textAlignment="center"
+    tools:context=".Activity.RegisterFromActivity">
 
     <Button
         android:id="@+id/register_btn"
@@ -14,8 +15,9 @@
         android:background="@drawable/button"
         android:fontFamily="@font/comfortaa"
         android:text="Register"
+        android:textAllCaps="false"
         android:textColor="#FFFFFF"
-        android:textSize="14sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.108"
