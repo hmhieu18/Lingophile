@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="24pt"
+        android:layout_marginTop="10dp"
+        android:text="Settings"
+        android:textAlignment="center"
+        android:fontFamily="@font/montserrat_bold"
+        android:textSize="30dp"
+        android:textColor="#393E46"/>
+
+   <LinearLayout
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:orientation="vertical"
+       android:layout_gravity="center_horizontal">
+
+       <Button
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:background="@drawable/settings_profile"
+           android:layout_marginBottom="10dp"
+           android:text="View Profile"
+           android:fontFamily="@font/comfortaa"
+           android:textAllCaps="false"
+           android:id="@+id/settings_profile_button"
+           android:textColor="#393E46"
+           />
+       <Button
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:background="@drawable/settings_edit"
+           android:layout_marginBottom="10dp"
+           android:text="Change Password"
+           android:fontFamily="@font/comfortaa"
+           android:textAllCaps="false"
+           android:id="@+id/settings_change_password_button"
+           android:textColor="#393E46"
+           />
+       <Button
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:background="@drawable/settings_info"
+           android:layout_marginBottom="10dp"
+           android:text="About Us"
+           android:fontFamily="@font/comfortaa"
+           android:textAllCaps="false"
+           android:id="@+id/settings_about_us_button"
+           android:textColor="#393E46"
+           />
+       <Button
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:background="@drawable/settings_logout"
+           android:layout_marginBottom="10dp"
+           android:text="Log Out"
+           android:fontFamily="@font/comfortaa"
+           android:textAllCaps="false"
+           android:id="@+id/settings_log_out_button"
+           android:textColor="#393E46"
+           />
+   </LinearLayout>
+
+
+
+
+
+
+
+
+</LinearLayout>
