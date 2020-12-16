@@ -5,7 +5,7 @@
     android:background="@drawable/lesson_item_background">
 
     <LinearLayout
-        android:layout_width="348dp"
+        android:layout_width="312dp"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
@@ -39,11 +39,17 @@
 
     </LinearLayout>
 
-    <TextView
+    <RatingBar
         android:id="@+id/rating"
-        android:layout_width="match_parent"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginEnd="20dp"
-        android:text="TextView" />
+        android:layout_gravity="center"
+        android:isIndicator="true"
+        android:numStars="5"
+        android:progressTint="#FFC107"
+        android:progressTintMode="src_in"
+        android:rating="5"
+        android:secondaryProgressTint="#FFEB3B"
+        android:stepSize="0.5" />
 </LinearLayout>

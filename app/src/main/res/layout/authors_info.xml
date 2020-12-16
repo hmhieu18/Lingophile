@@ -87,38 +87,19 @@
             android:fontFamily="@font/montserrat_bold"
             android:textSize="15dp"
             android:text="Rating"/>
-        <LinearLayout
+        <RatingBar
+            android:id="@+id/rating"
+            style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:weightSum="5">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/star"
-                android:layout_weight="1"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/star"
-                android:layout_weight="1"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/star"
-                android:layout_weight="1"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/star"
-                android:layout_weight="1"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/star"
-                android:layout_weight="1"/>
-        </LinearLayout>
+            android:layout_gravity="center"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:progressTint="#FFC107"
+            android:progressTintMode="src_in"
+            android:rating="5"
+            android:secondaryProgressTint="#FFEB3B"
+            android:stepSize="0.5" />
     </LinearLayout>
 
     <LinearLayout
