@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.example.lingophile.R;
 
-public class RegisterFromActivity extends AppCompatActivity {
+public class RegisterFormActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register_from);
+        setContentView(R.layout.activity_register_form);
     }
 }
