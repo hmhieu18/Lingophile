@@ -17,7 +17,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/LessonName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -28,7 +28,7 @@
             android:textStyle="bold" />
 
         <RatingBar
-            android:id="@+id/rating2"
+            android:id="@+id/rating"
             style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
             android:stepSize="0.5" />
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/topic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -70,7 +70,7 @@
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/textView11"
+                android:id="@+id/authorName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -84,7 +84,7 @@
                 app:srcCompat="@drawable/separator" />
 
             <TextView
-                android:id="@+id/textView12"
+                android:id="@+id/numberOfCard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -124,21 +124,21 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/flashCardBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Flashcard" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/EditBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Write" />
+            android:text="Edit" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/TestBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -157,6 +157,7 @@
         android:textStyle="bold" />
 
     <ListView
+        android:id="@+id/flashcardListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="10dp"
