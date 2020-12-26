@@ -1,13 +1,12 @@
 package com.example.lingophile.Views;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
@@ -20,17 +19,17 @@ import com.example.lingophile.Models.Lesson;
 import com.example.lingophile.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class MyListFragment extends Fragment {
-    private FirebaseManagement firebaseManagement=FirebaseManagement.getInstance();
-    private ArrayList<Lesson> lessonArrayList=new ArrayList<>();
+    private FirebaseManagement firebaseManagement = FirebaseManagement.getInstance();
+    private ArrayList<Lesson> lessonArrayList = new ArrayList<>();
     private ListView myListListView;
     private MyLessonListAdapter myLessonListAdapter;
+    private DataCenter dataCenter=DataCenter.getInstance();
 
 
     public MyListFragment() {
@@ -61,17 +60,20 @@ public class MyListFragment extends Fragment {
         initComponent(view);
         return view;
     }
+
     private ListView.OnItemClickListener itemClickListener = new ListView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//            openFragment(PlantDetailsFragment.newInstance(AppData.user.userPlants.get(position), position, false));
+            Intent myIntent = new Intent(getActivity(), LessonViewActivity.class);
+            myIntent.putExtra("lesson", position); //Optional parameters
+            Objects.requireNonNull(getActivity()).startActivity(myIntent);
         }
     };
+
     private void initComponent(View view) {
         myListListView = view.findViewById(R.id.lessonListview);
-        loadUserPlants();
-
-        //        myListListView.setOnItemClickListener(_gridViewItemOnClick);
+        loadUserLesson();
+        myListListView.setOnItemClickListener(itemClickListener);
 //        myListListView.setOnItemClickListener(itemClickListener);
     }
 
@@ -81,25 +83,20 @@ public class MyListFragment extends Fragment {
         transaction.addToBackStack(null);
         transaction.commit();
     }
-    private void loadUserPlants() {
+
+    private void loadUserLesson() {
         firebaseManagement.getDatabaseReference().child("users").child(firebaseManagement.getCurrentUser().getUid()).child("lessons_list").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<Lesson> tempLessonList = new ArrayList<>();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     Log.v("@@@", "" + dataSnapshot1.getKey()); //displays the key for the node
                     Lesson temp = dataSnapshot1.getValue(Lesson.class);   //gives the value for given keyname
                     System.out.println(temp.getTitle());
-                    if(DataCenter.user.getLessonArrayList()!=null) {
-                        DataCenter.user.getLessonArrayList().add(temp);
-                        refreshListView();
-                    }
-                    else
-                    {
-                        DataCenter.user.setLessonArrayList(new ArrayList<Lesson>());
-                        DataCenter.user.getLessonArrayList().add(temp);
-                        refreshListView();
-                    }
+                    tempLessonList.add(temp);
                 }
+                dataCenter.user.setLessonArrayList(tempLessonList);
+                refreshListView();
             }
 
             @Override
@@ -108,9 +105,9 @@ public class MyListFragment extends Fragment {
             }
         });
     }
-    private void refreshListView()
-    {
-        myLessonListAdapter = new MyLessonListAdapter(getContext(), R.layout.lesson_item, DataCenter.user.getLessonArrayList());
+
+    private void refreshListView() {
+        myLessonListAdapter = new MyLessonListAdapter(getContext(), R.layout.lesson_item, dataCenter.user.getLessonArrayList());
         myListListView.setAdapter(myLessonListAdapter);
     }
 }

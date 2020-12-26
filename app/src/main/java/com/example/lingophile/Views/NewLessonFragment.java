@@ -31,6 +31,7 @@ public class NewLessonFragment extends Fragment implements FlashcardInputDialog.
     public static ArrayList<FlashCard> flashCardArrayList = new ArrayList<>();
     private ListView flashcardListView;
     public static SmallFlashCardListAdapter smallFlashCardListAdapter;
+    private DataCenter dataCenter=DataCenter.getInstance();
 
 
     public NewLessonFragment() {
@@ -110,7 +111,7 @@ public class NewLessonFragment extends Fragment implements FlashcardInputDialog.
     View.OnClickListener nextClick = new View.OnClickListener() {
         public void onClick(View v) {
             openFragment(EditScheduleFragment.newInstance(
-                    new Lesson(DataCenter.user.getEmail(),
+                    new Lesson(dataCenter.user.getEmail(), descriptionEditText.getText().toString(),
                             titleEditText.getText().toString(),
                             flashCardArrayList)));
         }

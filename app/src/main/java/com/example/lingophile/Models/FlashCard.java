@@ -1,6 +1,8 @@
 package com.example.lingophile.Models;
 
-public class FlashCard {
+import java.io.Serializable;
+
+public class FlashCard implements Serializable {
     public String getWord() {
         return word;
     }

@@ -43,7 +43,7 @@ public class EditScheduleFragment extends Fragment {
     private TimePicker timePicker;
     private TextView repeatTextView;
     private int countBoxChecked = 0;
-
+    private DataCenter dataCenter=DataCenter.getInstance();
     public EditScheduleFragment() {
         // Required empty public constructor
     }
@@ -141,10 +141,10 @@ public class EditScheduleFragment extends Fragment {
         }
         currentLesson.setLearningSchedule(new Schedule(alarmDays, hourFromPicker, minuteFromPicker));
         currentLesson.getLearningSchedule().eventID = ReminderHelper.setReminder(getActivity(), currentLesson);
-        if (!DataCenter.user.getLessonArrayList().contains(currentLesson)) {
-            Log.d("xxxxxxxxxxx", Integer.toString(DataCenter.user.getLessonArrayList().size()));
-            DataCenter.user.getLessonArrayList().add(currentLesson);
-            Log.d("xxxxxxxxxxx", Integer.toString(DataCenter.user.getLessonArrayList().size()));
+        if (!dataCenter.user.getLessonArrayList().contains(currentLesson)) {
+            Log.d("xxxxxxxxxxx", Integer.toString(dataCenter.user.getLessonArrayList().size()));
+            dataCenter.user.getLessonArrayList().add(currentLesson);
+            Log.d("xxxxxxxxxxx", Integer.toString(dataCenter.user.getLessonArrayList().size()));
 
         }
 //            DataCenter.user.getLessonArrayList().; currentLesson.getLearningSchedule();

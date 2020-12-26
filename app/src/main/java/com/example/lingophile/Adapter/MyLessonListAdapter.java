@@ -56,9 +56,13 @@ public class MyLessonListAdapter extends ArrayAdapter<Lesson> {
         if (lesson != null) {
             rating.setRating(lesson.getRating());
 //            imageView.setImageResource(R.drawable.ic_wateringicon);
-            lessonName.setText(lesson.getTitle());
-            topic.setText(lesson.getTopic());
-            authorName.setText(lesson.getAuthorName());
+            lessonName.setText("Tile: " + lesson.getTitle());
+            topic.setText(lesson.getDescription());
+            String author = lesson.getAuthorName();
+            if (author.length() > 15) {
+                author = author.substring(0, 15);
+            }
+            authorName.setText("Author: " + author);
         }
         return convertView;
     }

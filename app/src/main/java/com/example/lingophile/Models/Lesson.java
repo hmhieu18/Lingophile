@@ -1,7 +1,5 @@
 package com.example.lingophile.Models;
 
-import android.os.Parcelable;
-
 import com.example.lingophile.Database.FirebaseManagement;
 
 import java.io.Serializable;
@@ -11,11 +9,18 @@ public class Lesson implements Serializable {
     String lessonID;
     int numberOfCard;
     String authorName;
-    float rating;
-    float percentage;
-    String topic;
+    float rating = 5;
+    float percentage = 0;
+    String description;
     String title;
     ArrayList<FlashCard> flashCardArrayList = new ArrayList<>();
+
+    public Lesson(String authorName, String description, String title, ArrayList<FlashCard> flashCardArrayList) {
+        this.authorName = authorName;
+        this.description = description;
+        this.title = title;
+        this.flashCardArrayList = flashCardArrayList;
+    }
 
     public Lesson(String authorName, String title, ArrayList<FlashCard> flashCardArrayList) {
         this.authorName = authorName;
@@ -31,7 +36,7 @@ public class Lesson implements Serializable {
         this.learningSchedule = learningSchedule;
     }
 
-    public Schedule learningSchedule=new Schedule();
+    public Schedule learningSchedule = new Schedule();
 
     public Lesson(String lessonID) {
         FirebaseManagement.getLessonByID();
@@ -41,7 +46,7 @@ public class Lesson implements Serializable {
         lessonID = "";
         numberOfCard = 0;
         authorName = "";
-        topic = "";
+        description = "";
         title = "";
         rating = 5;
         percentage = 0;
@@ -87,12 +92,12 @@ public class Lesson implements Serializable {
         this.percentage = percentage;
     }
 
-    public String getTopic() {
-        return topic;
+    public String getDescription() {
+        return description;
     }
 
-    public void setTopic(String topic) {
-        this.topic = topic;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getTitle() {

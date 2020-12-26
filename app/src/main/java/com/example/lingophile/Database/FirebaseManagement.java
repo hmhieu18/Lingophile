@@ -27,7 +27,7 @@ public class FirebaseManagement {
     private FirebaseAuth mAuth;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef;
-
+    private DataCenter dataCenter=DataCenter.getInstance();
     public static void getLessonByID() {
     }
 
@@ -78,7 +78,7 @@ public class FirebaseManagement {
                         if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = task.getResult().getUser();
                             User user = new User(firebaseUser.getUid(), "", firebaseUser.getEmail());
-                            DataCenter.setUser(user);
+                            dataCenter.setUser(user);
                             writeNewUser(user);
                             Intent myIntent = new Intent(activity, MainActivity.class);
                             activity.startActivity(myIntent);
@@ -102,12 +102,12 @@ public class FirebaseManagement {
         return false;
     }
 
-    private void loadUser() {
+    public void loadUser() {
         DatabaseReference ref = myRef.child("users").child(mAuth.getCurrentUser().getUid());
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                DataCenter.user = dataSnapshot.getValue(User.class);
+                dataCenter.user = dataSnapshot.getValue(User.class);
             }
 
             @Override
@@ -118,6 +118,6 @@ public class FirebaseManagement {
     }
 
     public void saveUserNewPlantToDatabase() {
-        myRef.child("users").child(mAuth.getUid()).child("lessons_list").setValue(DataCenter.user.getLessonArrayList());
+        myRef.child("users").child(mAuth.getUid()).child("lessons_list").setValue(dataCenter.user.getLessonArrayList());
     }
 }
