@@ -1,14 +1,11 @@
 package com.example.lingophile.Views;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -22,9 +19,6 @@ import com.example.lingophile.Helper.ReminderHelper;
 import com.example.lingophile.Models.Lesson;
 import com.example.lingophile.Models.Schedule;
 import com.example.lingophile.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -43,7 +37,8 @@ public class EditScheduleFragment extends Fragment {
     private TimePicker timePicker;
     private TextView repeatTextView;
     private int countBoxChecked = 0;
-    private DataCenter dataCenter=DataCenter.getInstance();
+    private DataCenter dataCenter = DataCenter.getInstance();
+
     public EditScheduleFragment() {
         // Required empty public constructor
     }
@@ -114,17 +109,17 @@ public class EditScheduleFragment extends Fragment {
     }
 
     private void loadOldSchedule() {
-        timePicker.setHour(currentLesson.getLearningSchedule().hour);
-        timePicker.setMinute(currentLesson.getLearningSchedule().min);
-        if (currentLesson.learningSchedule.dayOfWeek.size() > 0) {
-            for (int i = 0; i < checkBoxArrayList.size(); i++) {
-                if (currentLesson.getLearningSchedule().dayOfWeek != null)
-                    if (currentLesson.getLearningSchedule().dayOfWeek.contains(i + 1)) {
-                        checkBoxArrayList.get(i).setChecked(true);
-                        countBoxChecked++;
-                    }
-            }
-        }
+//        timePicker.setHour(currentLesson.getLearningSchedule().hour);
+//        timePicker.setMinute(currentLesson.getLearningSchedule().min);
+//        if (currentLesson.learningSchedule.dayOfWeek.size() > 0) {
+//            for (int i = 0; i < checkBoxArrayList.size(); i++) {
+//                if (currentLesson.getLearningSchedule().dayOfWeek != null)
+//                    if (currentLesson.getLearningSchedule().dayOfWeek.contains(i + 1)) {
+//                        checkBoxArrayList.get(i).setChecked(true);
+//                        countBoxChecked++;
+//                    }
+//            }
+//        }
 //        for (CheckBox cb1 : checkBoxArrayList) {
 //            if (!cb1.isChecked()) cb1.setEnabled(false);
 //        }
@@ -136,19 +131,15 @@ public class EditScheduleFragment extends Fragment {
         int minuteFromPicker = timePicker.getMinute();
         Toast.makeText(getContext(), "Setting Notification...", Toast.LENGTH_SHORT).show();
         ArrayList<Integer> alarmDays = getDayArrayList();
-        if (currentLesson.getLearningSchedule().eventID != 0) {
-            ReminderHelper.deleteEvent(getActivity(), currentLesson.getLearningSchedule().eventID);
+        if (dataCenter.user.getScheduleByLessonID(currentLesson.getLessonID())!=null) {
+            ReminderHelper.deleteEvent(getActivity(),
+                    dataCenter.user.getScheduleByLessonID(currentLesson.getLessonID()).eventID);
         }
-        currentLesson.setLearningSchedule(new Schedule(alarmDays, hourFromPicker, minuteFromPicker));
-        currentLesson.getLearningSchedule().eventID = ReminderHelper.setReminder(getActivity(), currentLesson);
-        if (!dataCenter.user.getLessonArrayList().contains(currentLesson)) {
-            Log.d("xxxxxxxxxxx", Integer.toString(dataCenter.user.getLessonArrayList().size()));
-            dataCenter.user.getLessonArrayList().add(currentLesson);
-            Log.d("xxxxxxxxxxx", Integer.toString(dataCenter.user.getLessonArrayList().size()));
-
-        }
-//            DataCenter.user.getLessonArrayList().; currentLesson.getLearningSchedule();
-        firebaseManagement.saveUserNewPlantToDatabase();
+        Schedule schedule = new Schedule(alarmDays, hourFromPicker, minuteFromPicker);
+        schedule.eventID=ReminderHelper.setReminder(getActivity(), schedule, currentLesson.getTitle());
+        dataCenter.user.setScheduleByLessonID(currentLesson.getLessonID(), schedule);
+        firebaseManagement.addLessonByID(currentLesson);
+        firebaseManagement.updateUserLessonList();
         openFragment(MyListFragment.newInstance("", ""));
     }
 

@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Lesson implements Serializable {
-    String lessonID;
+    String lessonID = Long.toString(System.currentTimeMillis() / 1000);
     int numberOfCard;
     String authorName;
     float rating = 5;
@@ -28,15 +28,6 @@ public class Lesson implements Serializable {
         this.flashCardArrayList = flashCardArrayList;
     }
 
-    public Schedule getLearningSchedule() {
-        return learningSchedule;
-    }
-
-    public void setLearningSchedule(Schedule learningSchedule) {
-        this.learningSchedule = learningSchedule;
-    }
-
-    public Schedule learningSchedule = new Schedule();
 
     public Lesson(String lessonID) {
         FirebaseManagement.getLessonByID();

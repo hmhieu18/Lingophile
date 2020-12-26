@@ -4,11 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -30,18 +29,18 @@ public class LessonViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int position;
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
-                position = 0;
+                lesson = null;
             } else {
-                position = extras.getInt("lesson");
+                lesson = (Lesson) extras.getSerializable("lesson");
             }
         } else {
-            position = savedInstanceState.getInt("lesson");
+            lesson = (Lesson) savedInstanceState.getSerializable("lesson");
         }
-        lesson = dataCenter.user.getLessonArrayList().get(position);
+//        Log.d("lesson ID", lessonID);
+//        lesson = dataCenter.getLessonByID(lessonID);
         setContentView(R.layout.activity_lesson_view);
         initComponent();
     }

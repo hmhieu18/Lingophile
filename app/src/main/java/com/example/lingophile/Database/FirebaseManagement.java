@@ -6,9 +6,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.lingophile.Models.Lesson;
 import com.example.lingophile.Models.User;
-import com.example.lingophile.Views.LoginActivity;
-import com.example.lingophile.Views.LoginFormActivity;
 import com.example.lingophile.Views.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -21,8 +20,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.concurrent.Executor;
-
 public class FirebaseManagement {
     private FirebaseAuth mAuth;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -33,6 +30,14 @@ public class FirebaseManagement {
 
     public FirebaseUser getCurrentUser() {
         return mAuth.getCurrentUser();
+    }
+
+    public void addLessonByID(Lesson lesson) {
+        myRef.child("lessons_list").child(lesson.getLessonID()).setValue(lesson);
+    }
+
+    public void updateUserLessonList() {
+        myRef.child("users").child(mAuth.getUid()).child("lessons_list").setValue(dataCenter.user.getLessonIDArrayList());
     }
 
     private static class SingletonHolder {
@@ -117,7 +122,7 @@ public class FirebaseManagement {
         });
     }
 
-    public void saveUserNewPlantToDatabase() {
-        myRef.child("users").child(mAuth.getUid()).child("lessons_list").setValue(dataCenter.user.getLessonArrayList());
+    public void updateLessonToDatabase() {
+        myRef.child("users").child(mAuth.getUid()).child("lessons_list").setValue(dataCenter.user.getLessonIDArrayList());
     }
 }

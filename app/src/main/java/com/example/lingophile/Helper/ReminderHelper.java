@@ -10,6 +10,7 @@ import android.provider.CalendarContract;
 import android.util.Log;
 
 import com.example.lingophile.Models.Lesson;
+import com.example.lingophile.Models.Schedule;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,22 +41,22 @@ public class ReminderHelper {
         return calendarUriBase;
     }
 
-    public static long setReminder(Activity activity, Lesson currentLesson) {
+    public static long setReminder(Activity activity, Schedule schedule, String lessonName) {
         // get calendar
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, currentLesson.learningSchedule.hour);
-        cal.set(Calendar.MINUTE, currentLesson.learningSchedule.min);
+        cal.set(Calendar.HOUR_OF_DAY, schedule.hour);
+        cal.set(Calendar.MINUTE, schedule.min);
         Uri EVENTS_URI = Uri.parse(getCalendarUriBase(activity) + "events");
         ContentResolver cr = activity.getContentResolver();
 
         // event insert
         ContentValues values = new ContentValues();
         values.put(CalendarContract.Events.CALENDAR_ID, 1);
-        values.put(CalendarContract.Events.TITLE, "It's time to learn " + currentLesson.getTitle());
+        values.put(CalendarContract.Events.TITLE, "It's time to learn " + lessonName);
         values.put(CalendarContract.Events.ALL_DAY, 0);
         values.put(CalendarContract.Events.DTSTART, cal.getTimeInMillis()); // event starts at 11 minutes from now
         values.put(CalendarContract.Events.DTEND, cal.getTimeInMillis() + 5 * 60 * 1000); // ends 60 minutes from now
-        values.put(CalendarContract.Events.RRULE, "FREQ=Weekly;" + getWeekDayAsString(currentLesson.learningSchedule.dayOfWeek));
+        values.put(CalendarContract.Events.RRULE, "FREQ=Weekly;" + getWeekDayAsString(schedule.dayOfWeek));
         values.put(CalendarContract.Events.HAS_ALARM, 1);
         values.put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
         Uri event = cr.insert(EVENTS_URI, values);
