@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class AppData {
     public AppData() {
-        _lessons = new ArrayList<>();
+        _LessonIDSchedule = new ArrayList<>();
     }
     public static User user;
 
-    public static ArrayList<Lesson> _lessons;
+    public static ArrayList<LessonIDSchedule> _LessonIDSchedule;
 
 }

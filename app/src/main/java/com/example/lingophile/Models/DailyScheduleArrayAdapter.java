@@ -55,7 +55,7 @@ public class DailyScheduleArrayAdapter extends ArrayAdapter<WeekScheduleItem.Sch
         if (scheduleItem != null) {
             imageView.setImageResource(R.drawable.ic_calendar);
             textView.setText(Integer.valueOf(scheduleItem.getHour()).toString() + ':' + Integer.valueOf(scheduleItem.getMin()).toString());
-            textViewSub.setText("Watering " + scheduleItem.getName());
+            textViewSub.setText("Learning schedule " + scheduleItem.getLessonID());
             textViewRating.setText("");
         }
         return convertView;

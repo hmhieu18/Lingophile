@@ -24,13 +24,13 @@ public class WeekScheduleItem {
 
     public void convertPlantListToSchedule() {
         for (int i = 1; i < 8; i++) {
-            for (Lesson p : AppData.user.userLessons) {
-                if (p.learningSchedule.dayOfWeek != null)
-                    for (int day : p.learningSchedule.dayOfWeek) {
+            for (LessonIDSchedule p : AppData.user.lessonIDArrayList) {
+                if (p.schedule.dayOfWeek != null)
+                    for (int day : p.schedule.dayOfWeek) {
                         if (i == day) {
                             dayScheduleItemsArrayList.get(i)
-                                    .scheduleItemArrayList.add(new ScheduleItem(p.name, p.getId(p.getName().replaceAll(" ", "").toLowerCase(), R.drawable.class),
-                                    p.learningSchedule.hour, p.learningSchedule.min));
+                                    .scheduleItemArrayList.add(new ScheduleItem(p.lessonID, p.getId(p.getLessonID().replaceAll(" ", "").toLowerCase(), R.drawable.class),
+                                    p.schedule.hour, p.schedule.min));
                         }
                     }
             }
@@ -55,22 +55,22 @@ public class WeekScheduleItem {
     }
 
     public class ScheduleItem {
-        private String name;
+        private String lessonID;
         private int imageID, hour, min;
 
         public ScheduleItem(String name, int imageID, int hour, int min) {
-            this.name = name;
+            this.lessonID = lessonID;
             this.imageID = imageID;
             this.hour = hour;
             this.min = min;
         }
 
-        public String getName() {
-            return name;
+        public String getLessonID() {
+            return lessonID;
         }
 
-        public void setName(String name) {
-            this.name = name;
+        public void setLessonID(String name) {
+            this.lessonID = name;
         }
 
         public int getImageID() {
