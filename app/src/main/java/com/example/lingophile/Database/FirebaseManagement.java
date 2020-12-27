@@ -2,7 +2,6 @@ package com.example.lingophile.Database;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,66 +18,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class FirebaseManagement {
     private FirebaseAuth mAuth;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef;
-    private DataCenter dataCenter = DataCenter.getInstance();
-    private static class SingletonHolder{
-        private static final FirebaseManagement INSTANCE = new FirebaseManagement();
-    }
-    public static FirebaseManagement getInstance(){
-        return SingletonHolder.INSTANCE;
-    }
-    public DatabaseReference getDatabaseReference(){
-        return myRef;
-    }
-    public User requestUserByEmail(final String username){
-        DatabaseReference myRef = database.getReference();
-        Query query = myRef.child("users").orderByChild("email").equalTo(username);
-        dataCenter.setUser(null);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    for (DataSnapshot snap : snapshot.getChildren()){
-                        dataCenter.setUser(snap.getValue(User.class));
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        return dataCenter.getUser();
-    }
-
-    public Lesson requestLessonByID(String lessonID){
-        DatabaseReference myRef = database.getReference();
-        Query query = myRef.child("lessons").orderByChild("lessonID").equalTo(lessonID);
-        dataCenter.setLesson(null);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    for (DataSnapshot snap : snapshot.getChildren()){
-                        dataCenter.setLesson(snap.getValue(Lesson.class));
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-      return dataCenter.getLesson();
-    }
+    private DataCenter dataCenter=DataCenter.getInstance();
     public static void getLessonByID() {
     }
 
@@ -86,9 +32,29 @@ public class FirebaseManagement {
         return mAuth.getCurrentUser();
     }
 
+    public void addLessonByID(Lesson lesson) {
+        myRef.child("lessons_list").child(lesson.getLessonID()).setValue(lesson);
+    }
+
+    public void updateUserLessonList() {
+        myRef.child("users").child(mAuth.getUid()).child("lessons_list").setValue(dataCenter.user.getLessonIDArrayList());
+    }
+
+    private static class SingletonHolder {
+        private static final FirebaseManagement INSTANCE = new FirebaseManagement();
+    }
+
+    public static FirebaseManagement getInstance() {
+        return SingletonHolder.INSTANCE;
+    }
+
     public FirebaseManagement() {
         myRef = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
+    }
+
+    public DatabaseReference getDatabaseReference() {
+        return myRef;
     }
 
     public void login(final Activity activity, String email, String password) {
@@ -146,7 +112,7 @@ public class FirebaseManagement {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                dataCenter.setUser(dataSnapshot.getValue(User.class));
+                dataCenter.user = dataSnapshot.getValue(User.class);
             }
 
             @Override
@@ -156,7 +122,7 @@ public class FirebaseManagement {
         });
     }
 
-    public void saveUserNewPlantToDatabase() {
-        myRef.child("users").child(mAuth.getUid()).child("lessons_list").setValue(dataCenter.getUser().getLessonArrayList());
+    public void updateLessonToDatabase() {
+        myRef.child("users").child(mAuth.getUid()).child("lessons_list").setValue(dataCenter.user.getLessonIDArrayList());
     }
 }

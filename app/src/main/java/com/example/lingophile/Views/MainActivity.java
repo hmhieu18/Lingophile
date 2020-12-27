@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements FlashcardInputDia
                             return true;
                         case R.id.navigation_calendar:
                             fragmentName.setText("Schedule Management");
-//                            openFragment(MyListFragment.newInstance("", ""));
+                            openFragment(Calendar.newInstance("", ""));
                             return true;
                         case R.id.navigation_new_lesson:
                             fragmentName.setText("New Lesson");

@@ -39,7 +39,6 @@ public class LoginFormActivity extends AppCompatActivity {
         public void onClick(View v) {
             String _email = emailEditText.getText().toString();
             String _password = passwordEditText.getText().toString();
-
             firebaseManagement.login(LoginFormActivity.this, _email, _password);
         }
     };
