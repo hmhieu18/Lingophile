@@ -1,84 +1,118 @@
 package com.example.lingophile.Models;
 
-public class Lesson {
+import com.example.lingophile.Database.FirebaseManagement;
 
-    /*
-        Store data and getting setting methods
-         */
-    private String _userID;
-    private String _lessionID;
-    private boolean _privacy;
-    private String _title;
-    private Float _rate;
-    private Float _percentage;
-    private String _topic;
+import java.io.Serializable;
+import java.util.ArrayList;
 
-    public Lesson(){
-        _userID = "";
-        _lessionID = "";
-        _privacy = true;
-        _title = "";
-        _rate = Float.valueOf(0);
-        _percentage = Float.valueOf(0);
-        _topic = "";
+public class Lesson implements Serializable {
+    String lessonID;
+    int numberOfCard;
+    String authorName;
+    float rating = 5;
+    float percentage = 0;
+    String description;
+    String title;
+    ArrayList<FlashCard> flashCardArrayList = new ArrayList<>();
+
+    public Lesson(String authorName, String description, String title, ArrayList<FlashCard> flashCardArrayList) {
+        this.authorName = authorName;
+        this.description = description;
+        this.title = title;
+        this.flashCardArrayList = flashCardArrayList;
     }
 
-
-
-    public String getUserID() {
-        return _userID;
+    public Lesson(String authorName, String title, ArrayList<FlashCard> flashCardArrayList) {
+        this.authorName = authorName;
+        this.title = title;
+        this.flashCardArrayList = flashCardArrayList;
     }
 
-    public void setUserID(String userID) {
-        this._userID = userID;
+    public Schedule getLearningSchedule() {
+        return learningSchedule;
     }
 
-    public String getLessionID() {
-        return _lessionID;
+    public void setLearningSchedule(Schedule learningSchedule) {
+        this.learningSchedule = learningSchedule;
     }
 
-    public void setLessionID(String lessionID) {
-        this._lessionID = lessionID;
+    public Schedule learningSchedule = new Schedule();
+
+    public Lesson(String lessonID) {
+        FirebaseManagement.getLessonByID();
     }
 
-    public boolean isPublic() {
-        return _privacy;
+    public Lesson() {
+        lessonID = "";
+        numberOfCard = 0;
+        authorName = "";
+        description = "";
+        title = "";
+        rating = 5;
+        percentage = 0;
     }
 
-    public void setPrivacy(boolean privacy) {
-        this._privacy = privacy;
+    public String getLessonID() {
+        return lessonID;
+    }
+
+    public void setLessonID(String lessonID) {
+        this.lessonID = lessonID;
+    }
+
+    public int getNumberOfCard() {
+        return numberOfCard;
+    }
+
+    public void setNumberOfCard(int numberOfCard) {
+        this.numberOfCard = numberOfCard;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
+    public float getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(float percentage) {
+        this.percentage = percentage;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getTitle() {
-        return _title;
+        return title;
     }
 
     public void setTitle(String title) {
-        this._title = title;
+        this.title = title;
     }
 
-    public Float getRate() {
-        return _rate;
+    public ArrayList<FlashCard> getFlashCardArrayList() {
+        return flashCardArrayList;
     }
 
-    public void setRate(Float rate) {
-        this._rate = rate;
+    public void setFlashCardArrayList(ArrayList<FlashCard> flashCardArrayList) {
+        this.flashCardArrayList = flashCardArrayList;
     }
-
-    public Float getPercentage() {
-        return _percentage;
-    }
-
-    public void setPercentage(Float percentage) {
-        this._percentage = percentage;
-    }
-
-    public String getTopic() {
-        return _topic;
-    }
-
-    public void setTopic(String topic) {
-        this._topic = topic;
-    }
-
 }

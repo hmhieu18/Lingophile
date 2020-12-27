@@ -2,7 +2,9 @@ package com.example.lingophile.Models;
 
 import com.google.firebase.database.DataSnapshot;
 
-public class FlashCard {
+import java.io.Serializable;
+
+public class FlashCard implements Serializable {
 
     /*
         Store data and getting setting methods
