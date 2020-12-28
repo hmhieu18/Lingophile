@@ -111,7 +111,7 @@ public class NewLessonFragment extends Fragment implements FlashcardInputDialog.
     View.OnClickListener nextClick = new View.OnClickListener() {
         public void onClick(View v) {
             openFragment(EditScheduleFragment.newInstance(
-                    new Lesson(dataCenter.getUser().getEmail(), descriptionEditText.getText().toString(),
+                    new Lesson(dataCenter.user.getEmail(), descriptionEditText.getText().toString(),
                             titleEditText.getText().toString(),
                             flashCardArrayList)));
         }

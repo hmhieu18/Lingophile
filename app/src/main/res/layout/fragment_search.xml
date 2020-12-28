@@ -14,15 +14,18 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_gravity="center_horizontal">
+
         <EditText
+            android:id="@+id/text_search"
             android:layout_width="250dp"
-            android:layout_height="40dp"
-            android:background="@drawable/search_box"
+            android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
+            android:background="@drawable/search_box"
             android:fontFamily="@font/montserrat_italic"
             android:hint="   Search query"
-            android:textSize="12dp"/>
+            android:textSize="12dp" />
         <Button
+            android:id="@+id/search_button_view"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:background="@drawable/search_icon"></Button>
@@ -33,6 +36,7 @@
     </LinearLayout>
 
     <ListView
+        android:id="@+id/list_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></ListView>
 

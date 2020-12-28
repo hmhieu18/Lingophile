@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,9 @@ import androidx.annotation.Nullable;
 
 import com.example.lingophile.Models.Lesson;
 import com.example.lingophile.Models.User;
+import com.example.lingophile.R;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +51,15 @@ public class UserAdapter extends ArrayAdapter<User> {
             LayoutInflater layoutInflater = LayoutInflater.from(_context);
             convertView = layoutInflater.inflate(_layoutID,null, false);
         }
-        TextView
+        TextView name = (TextView)convertView.findViewById(R.id.authorName);
+        TextView des = (TextView)convertView.findViewById(R.id.authorDescription);
+        RatingBar rating = (RatingBar)convertView.findViewById(R.id.rating);
+        User user = _items.get(position);
+        if (user != null){
+            rating.setRating(user.getRating());
+            name.setText(user.getUserID());
+            des.setText(user.getEmail());
+        }
         return convertView;
     }
 }

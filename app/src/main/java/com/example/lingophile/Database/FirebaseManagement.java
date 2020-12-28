@@ -2,6 +2,9 @@ package com.example.lingophile.Database;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint;
+import android.util.Log;
+import android.util.Pair;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,6 +22,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Comparator;
 
 public class FirebaseManagement {
     private FirebaseAuth mAuth;
@@ -125,4 +131,70 @@ public class FirebaseManagement {
     public void updateLessonToDatabase() {
         myRef.child("users").child(mAuth.getUid()).child("lessons_list").setValue(dataCenter.user.getLessonIDArrayList());
     }
+
+    public void requestLessonSearch(final String search){
+        DatabaseReference ref = myRef.child("lessons_list");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    ArrayList<Pair<Float, Lesson>> arrayList = new ArrayList<>();
+                    for (DataSnapshot lesson : snapshot.getChildren()){
+                        String title = lesson.child("title").getValue().toString();
+                        String des = lesson.child("description").getValue().toString();
+                        float match_title = matching(search, title);
+                        float match_des = matching(search, des);
+                        float rate = Math.max(match_title, match_des);
+                        Pair<Float, Lesson> add = new Pair<>(Float.valueOf(rate), lesson.getValue(Lesson.class));
+                        arrayList.add(add);
+                    }
+                    arrayList.sort(new Comparator<Pair<Float, Lesson>>() {
+                        @Override
+                        public int compare(Pair<Float, Lesson> floatLessonPair, Pair<Float, Lesson> t1) {
+                            if (floatLessonPair.first > t1.first)
+                                return -1;
+                            if (floatLessonPair.first < t1.first)
+                                return 1;
+                            return 0;
+                        }
+                    });
+                    ArrayList<Lesson> update = new ArrayList<>();
+                    for (Pair<Float, Lesson> item : arrayList){
+                        if (item.first > 0.5)
+                            update.add(item.second);
+                    }
+                    DataCenter.getInstance().setLessonArrayList(update);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+
+    private float matching(String x, String y){
+        int rows = x.length() + 1;
+        int cols = y.length() + 1;
+        int[][] distance = new int[rows][cols];
+        for (int i = 1; i < rows; i ++)
+            for (int j = 1; j < cols; j++){
+                distance[i][0] = i;
+                distance[0][j] = j;
+            }
+        for (int col = 1; col < cols; col++)
+            for (int row = 1; row < rows; row++) {
+                int cost;
+                if (x.charAt(row - 1) == y.charAt(col - 1))
+                    cost = 0;
+                else
+                    cost = 2;
+                distance[row][col] = Math.min(Math.min(distance[row-1][col] + 1, distance[row][col - 1] + 1), distance[row-1][col-1] + cost);
+            }
+        return (float) ((x.length() + y.length() - distance[rows - 1][cols - 1]) * 1.0 / (x.length() + y.length()));
+    }
+
+
+
 }

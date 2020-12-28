@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements FlashcardInputDia
                             return true;
                         case R.id.navigation_search:
                             fragmentName.setText("Search");
-//                            openFragment(MyListFragment.newInstance("", ""));
+                            openFragment(SearchFragment.newInstance("", ""));
                             return true;
                         case R.id.navigation_setting:
                             fragmentName.setText("Setting");

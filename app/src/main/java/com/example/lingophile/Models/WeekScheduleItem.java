@@ -1,6 +1,12 @@
 package com.example.lingophile.Models;
 
+import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.ArrayList;
+
+import com.example.lingophile.Database.DataCenter;
 import com.example.lingophile.R;
 
 public class WeekScheduleItem {
@@ -24,7 +30,7 @@ public class WeekScheduleItem {
 
     public void convertPlantListToSchedule() {
         for (int i = 1; i < 8; i++) {
-            for (LessonIDSchedule p : AppData.user.lessonIDArrayList) {
+            for (LessonIDSchedule p : DataCenter.getInstance().user.lessonIDArrayList) {
                 if (p.schedule.dayOfWeek != null)
                     for (int day : p.schedule.dayOfWeek) {
                         if (i == day) {
