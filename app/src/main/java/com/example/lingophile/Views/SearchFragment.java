@@ -1,6 +1,8 @@
 package com.example.lingophile.Views;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,8 +18,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.lingophile.Adapter.MyLessonListAdapter;
+import com.example.lingophile.Adapter.UserAdapter;
 import com.example.lingophile.Database.DataCenter;
 import com.example.lingophile.Database.FirebaseManagement;
+import com.example.lingophile.Helper.ReadDataListener;
 import com.example.lingophile.Models.Lesson;
 import com.example.lingophile.Models.User;
 import com.example.lingophile.R;
@@ -27,12 +32,13 @@ import java.util.Objects;
 public class SearchFragment extends Fragment {
     private EditText query;
     private Button search;
+    private Spinner spinner;
     private static ArrayList<User> arrayListUser;
     private static ArrayList<Lesson> arrayListLesson;
     private ListView listView;
     private FirebaseManagement fm = FirebaseManagement.getInstance();
     private MyLessonListAdapter mLessonListAdapter;
-
+    private UserAdapter mUserAdater;
     public SearchFragment(){
 
     }
@@ -66,7 +72,7 @@ public class SearchFragment extends Fragment {
         search = view.findViewById(R.id.search_button_view);
         listView = view.findViewById(R.id.list_search);
         search.setOnClickListener(searchListener);
-
+        spinner = view.findViewById(R.id.spinner);
     }
     public void openFragment(Fragment fragment) {
         FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
@@ -81,15 +87,66 @@ public class SearchFragment extends Fragment {
             String text = query.getText().toString();
             Log.d("@@@", "OKKKK");
             if (text != null){
-                fm.requestLessonSearch(text);
-                arrayListLesson = DataCenter.getInstance().getLessonArrayList();
-                refreshListView();
+                if (String.valueOf(spinner.getSelectedItem()).equals("Lessons")) {
+                    fm.requestLessonSearch(text, new ReadDataListener() {
+                        ProgressDialog dialog;
+                        @Override
+                        public void onStart() {
+                            dialog = new ProgressDialog(getActivity());
+                            dialog.setMessage("Please wait...");
+                            dialog.show();
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            if (dialog.isShowing())
+                                dialog.dismiss();
+                            refreshListView();
+                        }
+
+                        @Override
+                        public void onFail() {
+                            if (dialog.isShowing())
+                                dialog.dismiss();
+                        }
+                    });
+                } else {
+                    fm.requestUserSearch(text, new ReadDataListener() {
+                        ProgressDialog dialog;
+                        @Override
+                        public void onStart() {
+                            dialog = new ProgressDialog(getActivity());
+                            dialog.setMessage("Please wait...");
+                            dialog.show();
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            if (dialog.isShowing())
+                                dialog.dismiss();
+                            refreshListView();
+                        }
+
+                        @Override
+                        public void onFail() {
+                            if (dialog.isShowing())
+                                dialog.dismiss();
+                        }
+                    });
+                }
             }
         }
     };
 
     private void refreshListView(){
+        arrayListLesson = DataCenter.getInstance().getLessonArrayList();
         mLessonListAdapter = new MyLessonListAdapter(getContext(), R.layout.lesson_item,arrayListLesson);
-        listView.setAdapter(mLessonListAdapter);
+        arrayListUser = DataCenter.getInstance().getUserArrayList();
+        mUserAdater = new UserAdapter(getContext(), R.layout.author_info_item, arrayListUser);
+        if (String.valueOf(spinner.getSelectedItem()).equals("Authors")){
+            listView.setAdapter(mUserAdater);
+        } else {
+            listView.setAdapter(mLessonListAdapter);
+        }
     }
 }

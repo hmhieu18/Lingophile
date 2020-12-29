@@ -30,8 +30,10 @@
             android:layout_height="45dp"
             android:background="@drawable/search_icon"></Button>
         <Spinner
+            android:id="@+id/spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:entries="@array/spinner"
             android:layout_gravity="center_vertical"></Spinner>
     </LinearLayout>
 

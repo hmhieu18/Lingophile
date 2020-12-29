@@ -1,6 +1,7 @@
 package com.example.lingophile.Database;
 
 import android.os.Parcelable;
+import android.widget.ArrayAdapter;
 
 import com.example.lingophile.Models.Lesson;
 import com.example.lingophile.Models.User;
@@ -53,6 +54,12 @@ public class DataCenter {
     }
 
 
-
+    private ArrayList<User> userArrayList = new ArrayList<>();
+    public ArrayList<User> getUserArrayList(){
+        return userArrayList;
+    }
+    public void setUserArrayList(ArrayList<User> arrayList){
+        this.userArrayList = arrayList;
+    }
 
 }

@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.lingophile.Helper.ReadDataListener;
 import com.example.lingophile.Models.Lesson;
 import com.example.lingophile.Models.User;
 import com.example.lingophile.Views.MainActivity;
@@ -132,7 +133,8 @@ public class FirebaseManagement {
         myRef.child("users").child(mAuth.getUid()).child("lessons_list").setValue(dataCenter.user.getLessonIDArrayList());
     }
 
-    public void requestLessonSearch(final String search){
+    public void requestLessonSearch(final String search, final ReadDataListener mRead){
+        mRead.onStart();
         DatabaseReference ref = myRef.child("lessons_list");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -165,16 +167,56 @@ public class FirebaseManagement {
                     }
                     DataCenter.getInstance().setLessonArrayList(update);
                 }
+                mRead.onFinish();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                mRead.onFail();
+            }
+        });
+    }
+
+    public void requestUserSearch(final String request, final ReadDataListener mRead){
+        mRead.onStart();
+        DatabaseReference ref = myRef.child("users");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    ArrayList<Pair<Float, User>> arrayList = new ArrayList<>();
+                    for (DataSnapshot user : snapshot.getChildren()){
+                        String email = user.child("email").getValue().toString();
+                        String uid = user.child("userID").getValue().toString();
+                        String name = user.child("username").getValue().toString();
+                        float match_email = matching(request, email.substring(0, email.indexOf('@')));
+                        float match_id = matching(request, uid);
+                        float match_name = matching(request, name);
+                        float rate = Math.max(Math.max(match_email, match_id), match_name);
+                        Pair<Float, User> add = new Pair<>(Float.valueOf(rate), user.getValue(User.class));
+                        arrayList.add(add);
+                    }
+                    ArrayList<User> update = new ArrayList<>();
+                    for (Pair<Float, User> item : arrayList){
+                        if (item.first > 0.5)
+                            update.add(item.second);
+                    }
+                    DataCenter.getInstance().setUserArrayList(update);
+                }
+                mRead.onFinish();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                mRead.onFail();
             }
         });
     }
 
 
     private float matching(String x, String y){
+        if (y.length() == 0)
+            return 0;
         int rows = x.length() + 1;
         int cols = y.length() + 1;
         int[][] distance = new int[rows][cols];

@@ -12,13 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.lingophile.Models.Lesson;
 import com.example.lingophile.Models.User;
 import com.example.lingophile.R;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserAdapter extends ArrayAdapter<User> {
@@ -57,8 +53,8 @@ public class UserAdapter extends ArrayAdapter<User> {
         User user = _items.get(position);
         if (user != null){
             rating.setRating(user.getRating());
-            name.setText(user.getUserID());
-            des.setText(user.getEmail());
+            name.setText(user.getEmail());
+            des.setText(user.getUsername());
         }
         return convertView;
     }

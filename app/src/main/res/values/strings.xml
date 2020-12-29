@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Lingophile</string>
+    <string-array name="spinner">
+        <item>Authors</item>
+        <item>Lessons</item>
+    </string-array>
 </resources>
