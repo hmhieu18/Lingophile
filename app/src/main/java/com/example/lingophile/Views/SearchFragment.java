@@ -109,6 +109,17 @@ public class SearchFragment extends Fragment {
                             if (dialog.isShowing())
                                 dialog.dismiss();
                         }
+
+                        @Override
+                        public void updateUI() {
+
+                        }
+
+                        @Override
+                        public void onListenLessonSuccess(Lesson lesson) {
+
+                        }
+
                     });
                 } else {
                     fm.requestUserSearch(text, new ReadDataListener() {
@@ -131,6 +142,16 @@ public class SearchFragment extends Fragment {
                         public void onFail() {
                             if (dialog.isShowing())
                                 dialog.dismiss();
+                        }
+
+                        @Override
+                        public void updateUI() {
+
+                        }
+
+                        @Override
+                        public void onListenLessonSuccess(Lesson lesson) {
+
                         }
                     });
                 }

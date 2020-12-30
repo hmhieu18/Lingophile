@@ -3,6 +3,7 @@ package com.example.lingophile.Views;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,8 @@ import com.example.lingophile.Adapter.SmallFlashCardListAdapter;
 import com.example.lingophile.Database.DataCenter;
 import com.example.lingophile.Models.Lesson;
 import com.example.lingophile.R;
+
+import java.util.Objects;
 
 public class LessonViewActivity extends AppCompatActivity {
     private DataCenter dataCenter = DataCenter.getInstance();
@@ -75,7 +78,9 @@ public class LessonViewActivity extends AppCompatActivity {
     private ListView.OnItemClickListener listViewItemOnClick = new ListView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//            openFragment(PlantDetailsFragment.newInstance(AppData.user.userPlants.get(position), position, false));
+            Intent myIntent = new Intent(LessonViewActivity.this, FlashcardViewActivity.class);
+            myIntent.putExtra("lesson", lesson); //Optional parameters
+            LessonViewActivity.this.startActivity(myIntent);
         }
     };
 }

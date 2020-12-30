@@ -31,6 +31,16 @@ public class DataCenter {
 
     private ArrayList<Lesson> lessonArrayList = new ArrayList<>();
 
+    public ArrayList<Lesson> getThisUserLessonArrayList() {
+        return thisUserLessonArrayList;
+    }
+
+    public void setThisUserLessonArrayList(ArrayList<Lesson> thisUserLessonArrayList) {
+        this.thisUserLessonArrayList = thisUserLessonArrayList;
+    }
+
+    private ArrayList<Lesson> thisUserLessonArrayList = new ArrayList<>();
+
     public DataCenter() {
 //        firebaseManagement.isLogin();
     }
