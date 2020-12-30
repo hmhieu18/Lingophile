@@ -25,18 +25,17 @@ public class WeekScheduleItem {
         for (int i = 0; i < 8; i++) {
             dayScheduleItemsArrayList.add(new DayScheduleItem());
         }
-        convertPlantListToSchedule();
+        convertLessonListToSchedule();
     }
 
-    public void convertPlantListToSchedule() {
+    public void convertLessonListToSchedule() {
         for (int i = 1; i < 8; i++) {
             for (LessonIDSchedule p : DataCenter.getInstance().user.lessonIDArrayList) {
                 if (p.schedule.dayOfWeek != null)
                     for (int day : p.schedule.dayOfWeek) {
                         if (i == day) {
                             dayScheduleItemsArrayList.get(i)
-                                    .scheduleItemArrayList.add(new ScheduleItem(p.lessonID, p.getId(p.getLessonID().replaceAll(" ", "").toLowerCase(), R.drawable.class),
-                                    p.schedule.hour, p.schedule.min));
+                                    .scheduleItemArrayList.add(new ScheduleItem(p.lessonID, p.schedule.hour, p.schedule.min));
                         }
                     }
             }
@@ -60,31 +59,19 @@ public class WeekScheduleItem {
         private ArrayList<ScheduleItem> scheduleItemArrayList;
     }
 
+
     public class ScheduleItem {
         private String lessonID;
-        private int imageID, hour, min;
+        private int hour, min;
 
-        public ScheduleItem(String name, int imageID, int hour, int min) {
-            this.lessonID = lessonID;
-            this.imageID = imageID;
+        public ScheduleItem(String lesson, int hour, int min) {
+            this.lessonID = lesson;
             this.hour = hour;
             this.min = min;
         }
 
-        public String getLessonID() {
+        public String getlesson() {
             return lessonID;
-        }
-
-        public void setLessonID(String name) {
-            this.lessonID = name;
-        }
-
-        public int getImageID() {
-            return imageID;
-        }
-
-        public void setImageID(int imageID) {
-            this.imageID = imageID;
         }
 
         public int getHour() {
@@ -103,4 +90,6 @@ public class WeekScheduleItem {
             this.min = min;
         }
     }
+
+
 }
