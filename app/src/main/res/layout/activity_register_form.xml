@@ -44,6 +44,7 @@
                 android:hint="      username*"
                 android:inputType="textPersonName" />
 
+
             <EditText
                 android:id="@+id/passwordEdittext"
                 android:layout_width="wrap_content"
@@ -52,7 +53,7 @@
                 android:ems="10"
                 android:fontFamily="@font/montserrat_italic"
                 android:hint="      password*"
-                android:inputType="textPersonName" />
+                android:inputType="textPassword" />
 
             <EditText
                 android:id="@+id/password2Edittext"
@@ -62,7 +63,7 @@
                 android:ems="10"
                 android:fontFamily="@font/montserrat_italic"
                 android:hint="      re-enter password"
-                android:inputType="textPersonName" />
+                android:inputType="textPassword" />
 
             <Button
                 android:id="@+id/register_btn"

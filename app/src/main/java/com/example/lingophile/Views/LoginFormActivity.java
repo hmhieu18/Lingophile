@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,7 +40,12 @@ public class LoginFormActivity extends AppCompatActivity {
         public void onClick(View v) {
             String _email = emailEditText.getText().toString();
             String _password = passwordEditText.getText().toString();
-            firebaseManagement.login(LoginFormActivity.this, _email, _password);
+            if (!_email.equals("") && !_password.equals(""))
+                firebaseManagement.login(LoginFormActivity.this, _email, _password);
+            else
+            {
+                Toast.makeText(LoginFormActivity.this, "Please check your input again", Toast.LENGTH_SHORT).show();
+            }
         }
     };
 }

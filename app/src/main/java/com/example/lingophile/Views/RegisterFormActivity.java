@@ -9,6 +9,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.lingophile.Database.DataCenter;
 import com.example.lingophile.Database.FirebaseManagement;
@@ -39,9 +40,12 @@ public class RegisterFormActivity extends AppCompatActivity {
 
     View.OnClickListener registerClick = new View.OnClickListener() {
         public void onClick(View v) {
-            Log.d("abc", "abc");
-            if (checkValidInput()) {
+            if (!emailEditText.getText().toString().equals("") && !passwordEditText.getText().toString().equals("") && !usernameEditText.getText().toString().equals("")) {
                 firebaseManagement.register(RegisterFormActivity.this, emailEditText.getText().toString(), passwordEditText.getText().toString(), usernameEditText.getText().toString());
+            }
+            else
+            {
+                Toast.makeText(RegisterFormActivity.this, "Please check your input again", Toast.LENGTH_SHORT).show();
             }
         }
     };

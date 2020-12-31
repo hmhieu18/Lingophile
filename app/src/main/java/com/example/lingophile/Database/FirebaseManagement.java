@@ -280,7 +280,6 @@ public class FirebaseManagement {
                 }
                 dataCenter.user.setLessonIDArrayList(tempLessonList);
                 for (LessonIDSchedule lessonIDSchedule : dataCenter.user.getLessonIDArrayList()) {
-                    ArrayList<Lesson> abc = new ArrayList<>();
                     loadLessonOfUser(lessonIDSchedule.getLessonID(), new ReadDataListener() {
                         @Override
                         public void onStart() {
