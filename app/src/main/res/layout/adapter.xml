@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_margin="10dp"
     app:cardUseCompatPadding="true">
 
     <FrameLayout
@@ -31,41 +30,9 @@
                 style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
-
-                <Button
-                    android:id="@+id/hear"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/hear"
-                    android:backgroundTint="@color/pink" />
-
-                <Button
-                    android:id="@+id/speak"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/speak"
-                    android:backgroundTint="@color/pink" />
-            </LinearLayout>
+                android:layout_marginTop="24dp"/>
 
         </LinearLayout>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|end"
-            android:layout_marginTop="-5dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:backgroundTint="@color/pink"
-            android:src="@drawable/ic_bookmark_24dp" />
 
     </FrameLayout>
 

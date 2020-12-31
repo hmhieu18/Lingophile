@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 
-import com.example.lingophile.Models.DailyScheduleArrayAdapter;
+import com.example.lingophile.Adapter.UserAdapter;
 import com.example.lingophile.Models.WeekScheduleItem;
 import com.example.lingophile.R;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class Calendar extends Fragment {
     private TextView dayTextView;
     private WeekScheduleItem weekScheduleItem = new WeekScheduleItem();
     private ListView scheduleListView;
-    public static DailyScheduleArrayAdapter scheduleArrayAdapter;
+    public static UserAdapter.DailyScheduleArrayAdapter scheduleArrayAdapter;
 
     public Calendar() {
         // Required empty public constructor
@@ -76,7 +76,7 @@ public class Calendar extends Fragment {
     }
 
     private void setAdapterListView(int dayInt) {
-        scheduleArrayAdapter = new DailyScheduleArrayAdapter(getContext(), R.layout.prediction_item,
+        scheduleArrayAdapter = new UserAdapter.DailyScheduleArrayAdapter(getContext(), R.layout.prediction_item,
                 weekScheduleItem.getDayScheduleItemsArrayList().get(dayInt).getScheduleItemArrayList());
         scheduleListView.setAdapter(scheduleArrayAdapter);
     }

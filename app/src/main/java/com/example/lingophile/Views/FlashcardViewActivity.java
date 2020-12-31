@@ -1,14 +1,20 @@
 package com.example.lingophile.Views;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import com.example.lingophile.Adapter.CardFragmentPagerAdapter;
 import com.example.lingophile.Adapter.CardPagerAdapter;
@@ -17,17 +23,23 @@ import com.example.lingophile.Models.FlashCard;
 import com.example.lingophile.Models.Lesson;
 import com.example.lingophile.R;
 
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class FlashcardViewActivity extends AppCompatActivity implements View.OnClickListener,
         CompoundButton.OnCheckedChangeListener {
 
     private Lesson lesson;
     private ViewPager mViewPager;
-
+    private Button speak;
+    private Button hear;
+    private TextView listenText;
     private CardPagerAdapter mCardAdapter;
     private ShadowTransformer mCardShadowTransformer;
     private CardFragmentPagerAdapter mFragmentCardAdapter;
     private ShadowTransformer mFragmentCardShadowTransformer;
+    private TextToSpeech mText2Speech;
+    private boolean mIsText2SpeechReady = false;
 
     private boolean mShowingFragments = false;
 
@@ -44,8 +56,19 @@ public class FlashcardViewActivity extends AppCompatActivity implements View.OnC
         } else {
             lesson = (Lesson) savedInstanceState.getSerializable("lesson");
         }
-
         setContentView(R.layout.activity_flashcard_view);
+        initComponent();
+    }
+
+    private void initComponent() {
+        listenText = findViewById(R.id.textListen);
+        mText2Speech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                mIsText2SpeechReady = true;
+            }
+        });
+        mText2Speech.setLanguage(Locale.ENGLISH);
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
 
         mCardAdapter = new CardPagerAdapter(this);
@@ -61,6 +84,20 @@ public class FlashcardViewActivity extends AppCompatActivity implements View.OnC
         mViewPager.setAdapter(mCardAdapter);
         mViewPager.setPageTransformer(false, mCardShadowTransformer);
         mViewPager.setOffscreenPageLimit(3);
+        hear = findViewById(R.id.speaker);
+        speak = findViewById(R.id.micro);
+
+        hear.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                FlashCard currentCard = mCardAdapter.getFlashcardAt(mViewPager.getCurrentItem());
+                if (mIsText2SpeechReady) {
+                    mText2Speech.setLanguage(Locale.ENGLISH);
+                    mText2Speech.speak(currentCard.getWord(),
+                            TextToSpeech.QUEUE_FLUSH, null);
+                }
+            }
+        });
+        speak.setOnClickListener(hearClick);
     }
 
     @Override
@@ -75,5 +112,41 @@ public class FlashcardViewActivity extends AppCompatActivity implements View.OnC
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         mCardShadowTransformer.enableScaling(b);
         mFragmentCardShadowTransformer.enableScaling(b);
+    }
+
+    final public static int RESULT_SPEECH = 991;
+    final View.OnClickListener hearClick = new View.OnClickListener() {
+        public void onClick(View v) {
+            Intent intent = new Intent(
+                    RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+
+            try {
+                FlashcardViewActivity.this.startActivityForResult(intent, RESULT_SPEECH);
+            } catch (ActivityNotFoundException ignored) {
+            }
+        }
+    };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case RESULT_SPEECH: {
+                if (resultCode == RESULT_OK && null != data) {
+                    ArrayList<String> text = data
+                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    listenText.setText(text.get(0));
+                    FlashCard currentCard = mCardAdapter.getFlashcardAt(mViewPager.getCurrentItem());
+                    if (text.get(0).toLowerCase().equals(currentCard.getWord().toLowerCase())) {
+                        listenText.setTextColor(Color.GREEN);
+                    } else
+                        listenText.setTextColor(Color.RED);
+
+                }
+                break;
+            }
+        }
     }
 }
