@@ -6,14 +6,24 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Lesson implements Serializable {
-    String lessonID = Long.toString(System.currentTimeMillis() / 1000);
-    int numberOfCard;
-    String authorName;
-    float rating = 5;
-    float percentage = 0;
-    String description;
-    String title;
-    ArrayList<FlashCard> flashCardArrayList = new ArrayList<>();
+    private String lessonID = Long.toString(System.currentTimeMillis() / 1000);
+    private int numberOfCard;
+    private String authorName;
+    private float rating = 5;
+    private float percentage = 0;
+
+    public boolean is_private() {
+        return _private;
+    }
+
+    public void set_private(boolean _private) {
+        this._private = _private;
+    }
+
+    private boolean _private=false;
+    private String description;
+    private String title;
+    private ArrayList<FlashCard> flashCardArrayList = new ArrayList<>();
 
     public Lesson(String authorName, String description, String title, ArrayList<FlashCard> flashCardArrayList) {
         this.authorName = authorName;

@@ -30,6 +30,7 @@ import java.util.Objects;
  */
 public class EditScheduleFragment extends Fragment {
     private ArrayList<CheckBox> checkBoxArrayList = new ArrayList<>();
+    private CheckBox _privateCheckBox;
     private Button finish;
     private Lesson currentLesson;
     private int timetolearn;
@@ -71,6 +72,7 @@ public class EditScheduleFragment extends Fragment {
     }
 
     private void initComponent(View view) {
+        _privateCheckBox=view.findViewById(R.id._privateCheckBox);
         CheckBox temp;
         temp = view.findViewById(R.id.sun);
         checkBoxArrayList.add(temp);
@@ -99,6 +101,7 @@ public class EditScheduleFragment extends Fragment {
     }
 
     private void setClickListenerForButtonsArrayList() {
+
         for (CheckBox cb : checkBoxArrayList) {
             cb.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -129,6 +132,10 @@ public class EditScheduleFragment extends Fragment {
     private void finishClicked() {
         int hourFromPicker = timePicker.getHour();
         int minuteFromPicker = timePicker.getMinute();
+        if(_privateCheckBox.isChecked())
+        {
+            currentLesson.set_private(true);
+        }
         Toast.makeText(getContext(), "Setting Notification...", Toast.LENGTH_SHORT).show();
         ArrayList<Integer> alarmDays = getDayArrayList();
         if (dataCenter.user.getScheduleByLessonID(currentLesson.getLessonID())!=null) {

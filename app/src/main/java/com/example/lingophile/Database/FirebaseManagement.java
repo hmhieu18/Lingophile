@@ -280,7 +280,7 @@ public class FirebaseManagement {
                 }
                 dataCenter.user.setLessonIDArrayList(tempLessonList);
                 for (LessonIDSchedule lessonIDSchedule : dataCenter.user.getLessonIDArrayList()) {
-                    loadLessonOfUser(lessonIDSchedule.getLessonID(), new ReadDataListener() {
+                    loadLessonByID(lessonIDSchedule.getLessonID(), new ReadDataListener() {
                         @Override
                         public void onStart() {
 
@@ -323,7 +323,7 @@ public class FirebaseManagement {
         });
     }
 
-    private void loadLessonOfUser(String lessonID, final ReadDataListener mRead) {
+    public void loadLessonByID(String lessonID, final ReadDataListener mRead) {
 //        DatabaseReference ref = firebaseManagement.getDatabaseReference().;
         myRef.child("lessons_list").child(lessonID).addValueEventListener(new ValueEventListener() {
             @Override
@@ -337,6 +337,5 @@ public class FirebaseManagement {
             }
         });
     }
-
 
 }

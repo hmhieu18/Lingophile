@@ -29,11 +29,11 @@
 
 
             <CheckBox
-                android:id="@+id/mon2"
+                android:id="@+id/_privateCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="Public"
+                android:text="Private"
                 android:textSize="18dp" />
 
             <TextView

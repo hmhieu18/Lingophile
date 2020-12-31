@@ -10,43 +10,27 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 
+import com.example.lingophile.Adapter.DailyScheduleArrayAdapter;
 import com.example.lingophile.Adapter.UserAdapter;
-import com.example.lingophile.Database.FirebaseManagement;
 import com.example.lingophile.Models.WeekScheduleItem;
 import com.example.lingophile.R;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Calendar extends Fragment {
-    private FirebaseManagement firebaseManagement = FirebaseManagement.getInstance();
     private ArrayList<Button> buttonArrayList = new ArrayList<>();
     private TextView dayTextView;
     private WeekScheduleItem weekScheduleItem = new WeekScheduleItem();
     private ListView scheduleListView;
-    public static UserAdapter.DailyScheduleArrayAdapter scheduleArrayAdapter;
+    public DailyScheduleArrayAdapter scheduleArrayAdapter;
 
     public Calendar() {
         // Required empty public constructor
     }
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    public static Calendar newInstance(String param1, String param2) {
-        Calendar fragment = new Calendar();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-    public void openFragment(Fragment fragment) {
-        FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+    public static Calendar newInstance() {
+        return new Calendar();
     }
 
     @Override
@@ -93,7 +77,7 @@ public class Calendar extends Fragment {
     }
 
     private void setAdapterListView(int dayInt) {
-        scheduleArrayAdapter = new UserAdapter.DailyScheduleArrayAdapter(getContext(), R.layout.prediction_item,
+        scheduleArrayAdapter = new DailyScheduleArrayAdapter(getContext(), R.layout.prediction_item,
                 weekScheduleItem.getDayScheduleItemsArrayList().get(dayInt).getScheduleItemArrayList());
         scheduleListView.setAdapter(scheduleArrayAdapter);
     }
@@ -134,5 +118,4 @@ public class Calendar extends Fragment {
             }
         }
     };
-
 }
