@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="10dp"
     android:textAlignment="center"
     tools:context=".Views.RegisterFormActivity">
 
@@ -25,46 +26,83 @@
                 android:text="Hello there!"
                 android:textSize="30sp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/login_edittext"
+            android:orientation="vertical">
             <EditText
                 android:id="@+id/emailEditText"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/login_edittext"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:fontFamily="@font/montserrat_italic"
-                android:hint="      email*"
+                android:hint="email*"
                 android:inputType="textPersonName" />
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/login_edittext"
+            android:orientation="vertical">
             <EditText
                 android:id="@+id/usernameEditText"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/login_edittext"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:ems="10"
                 android:fontFamily="@font/montserrat_italic"
-                android:hint="      username*"
+                android:hint="username*"
                 android:inputType="textPersonName" />
+        </LinearLayout>
 
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/login_edittext"
+            android:orientation="vertical">
             <EditText
                 android:id="@+id/passwordEdittext"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/login_edittext"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:ems="10"
                 android:fontFamily="@font/montserrat_italic"
-                android:hint="      password*"
+                android:hint="password*"
                 android:inputType="textPassword" />
-
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/login_edittext"
+            android:orientation="vertical">
             <EditText
                 android:id="@+id/password2Edittext"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/login_edittext"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:ems="10"
                 android:fontFamily="@font/montserrat_italic"
-                android:hint="      re-enter password"
+                android:hint="re-enter password"
                 android:inputType="textPassword" />
-
+        </LinearLayout>
             <Button
                 android:id="@+id/register_btn"
                 android:layout_width="wrap_content"

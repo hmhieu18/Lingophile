@@ -4,17 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:layout_marginTop="20dp"
     >
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="24pt"
-        android:layout_marginTop="10dp"
-        android:text="Settings"
-        android:textAlignment="center"
-        android:fontFamily="@font/montserrat_bold"
-        android:textSize="30dp"
-        android:textColor="#393E46"/>
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="24pt"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:text="Settings"-->
+<!--        android:textAlignment="center"-->
+<!--        android:fontFamily="@font/montserrat_bold"-->
+<!--        android:textSize="30dp"-->
+<!--        android:textColor="#393E46"/>-->
 
    <LinearLayout
        android:layout_width="wrap_content"
@@ -67,12 +68,4 @@
            android:textColor="#393E46"
            />
    </LinearLayout>
-
-
-
-
-
-
-
-
 </LinearLayout>
