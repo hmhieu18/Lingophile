@@ -2,7 +2,6 @@ package com.example.lingophile.Database;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
@@ -135,13 +134,11 @@ public class FirebaseManagement {
     }
 
     public boolean isLogin() {
-        if (mAuth.getCurrentUser() != null) {
-            return true;
-        }
-        return false;
+        return mAuth.getCurrentUser() != null;
     }
 
     public void loadUser(final ReadDataListener mRead) {
+        mRead.onStart();
         DatabaseReference ref = myRef.child("users").child(mAuth.getCurrentUser().getUid());
         ref.addValueEventListener(new ValueEventListener() {
             @Override

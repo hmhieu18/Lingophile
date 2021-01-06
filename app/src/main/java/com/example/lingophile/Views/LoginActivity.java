@@ -1,9 +1,7 @@
 package com.example.lingophile.Views;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,17 +9,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.lingophile.Database.DataCenter;
-import com.example.lingophile.Database.FirebaseManagement;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.example.lingophile.Database.FirebaseManagement;
 import com.example.lingophile.Helper.ReadDataListener;
 import com.example.lingophile.Models.Lesson;
-import com.example.lingophile.Models.User;
 import com.example.lingophile.R;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.util.ArrayList;
-import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
     private Button loginBtn, registerBtn;
@@ -31,30 +25,40 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if (firebaseManagement.isLogin()) {
-            firebaseManagement.loadUser(new ReadDataListener() {
-                @Override
-                public void onStart(){
-                }
+            firebaseManagement.loadUser(
+                    new ReadDataListener() {
+                        ProgressDialog dialog;
 
-                @Override
-                public void onFinish() {
-                    onAuthSuccess();
-                }
+                        @Override
+                        public void onStart() {
+                            dialog = new ProgressDialog(LoginActivity.this);
+                            dialog.setMessage("Please wait...");
+                            dialog.show();
+                        }
 
-                @Override
-                public void onFail() {
-                }
+                        @Override
+                        public void onFinish() {
+                            if (dialog.isShowing())
+                                dialog.dismiss();
+                            onAuthSuccess();
+                        }
 
-                @Override
-                public void updateUI() {
+                        @Override
+                        public void onFail() {
+                            if (dialog.isShowing())
+                                dialog.dismiss();
+                        }
 
-                }
+                        @Override
+                        public void updateUI() {
 
-                @Override
-                public void onListenLessonSuccess(Lesson lesson) {
+                        }
 
-                }
-            });
+                        @Override
+                        public void onListenLessonSuccess(Lesson lesson) {
+
+                        }
+                    });
         }
     }
 

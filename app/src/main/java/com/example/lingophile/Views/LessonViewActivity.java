@@ -3,6 +3,7 @@ package com.example.lingophile.Views;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -16,10 +17,11 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.lingophile.Adapter.SmallFlashCardListAdapter;
 import com.example.lingophile.Database.DataCenter;
+import com.example.lingophile.Database.FirebaseManagement;
 import com.example.lingophile.Models.Lesson;
 import com.example.lingophile.R;
 
-public class LessonViewActivity extends AppCompatActivity {
+public class LessonViewActivity extends AppCompatActivity implements StarRatingDialog.RatingDialogListener {
     private DataCenter dataCenter = DataCenter.getInstance();
     private Lesson lesson;
     private RatingBar ratingbar;
@@ -27,6 +29,7 @@ public class LessonViewActivity extends AppCompatActivity {
     private TextView lessonTitleTextView, topicTextView, authorTextView, numberOfCardTextView, addToMyListTextView;
     private ListView flashcardListView;
     private SmallFlashCardListAdapter smallFlashCardListAdapter;
+    private FirebaseManagement fm = FirebaseManagement.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +50,20 @@ public class LessonViewActivity extends AppCompatActivity {
         initComponent();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initComponent() {
         flashcardBtn = findViewById(R.id.flashCardBtn);
         editBtn = findViewById(R.id.EditBtn);
         testBtn = findViewById(R.id.TestBtn);
         addToMyListBtn = findViewById(R.id.addToMyListBtn);
         ratingbar = findViewById(R.id.rating);
+        ratingbar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                openDialog();
+                return false;
+            }
+        });
         lessonTitleTextView = findViewById(R.id.LessonName);
         authorTextView = findViewById(R.id.authorName);
         topicTextView = findViewById(R.id.topic);
@@ -80,7 +91,9 @@ public class LessonViewActivity extends AppCompatActivity {
             addToMyListBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    openFragment(EditScheduleFragment.newInstance(lesson));
+                    Intent myIntent = new Intent(LessonViewActivity.this, EditScheduleActivity.class);
+                    myIntent.putExtra("lesson", lesson); //Optional parameters
+                    LessonViewActivity.this.startActivity(myIntent);
                 }
             });
         }
@@ -102,5 +115,16 @@ public class LessonViewActivity extends AppCompatActivity {
         }
     };
 
+    public void openDialog() {
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXX");
+        StarRatingDialog starRatingDialog = new StarRatingDialog();
+        starRatingDialog.show(getSupportFragmentManager(), "tag");
+    }
 
+    @Override
+    public void updateRating(float rating) {
+        lesson.setRating(Math.min((float) (lesson.getRating() + 0.5 * (lesson.getRating() - rating)), 5));
+        fm.addLessonByID(lesson);
+        ratingbar.setRating(lesson.getRating());
+    }
 }

@@ -2,6 +2,7 @@ package com.example.lingophile.Views;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -97,10 +98,13 @@ public class NewLessonFragment extends Fragment implements FlashcardInputDialog.
 
     View.OnClickListener nextClick = new View.OnClickListener() {
         public void onClick(View v) {
-            openFragment(EditScheduleFragment.newInstance(
-                    new Lesson(dataCenter.user.getEmail(), descriptionEditText.getText().toString(),
-                            titleEditText.getText().toString(),
-                            flashCardArrayList)));
+            Lesson lesson = new Lesson(dataCenter.user.getEmail(), descriptionEditText.getText().toString(),
+                    titleEditText.getText().toString(),
+                    flashCardArrayList);
+            Intent myIntent = new Intent(getContext(), EditScheduleActivity.class);
+            myIntent.putExtra("lesson", lesson);
+            getContext().startActivity(myIntent);
+
         }
     };
 

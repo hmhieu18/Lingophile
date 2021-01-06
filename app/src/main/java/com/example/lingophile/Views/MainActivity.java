@@ -1,13 +1,13 @@
 package com.example.lingophile.Views;
 
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.example.lingophile.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements FlashcardInputDia
         fragmentName=findViewById(R.id.fragmentName);
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+        bottomNavigation.setSelectedItemId(R.id.navigation_my_list);
         fragmentName.setText("My List");
         openFragment(MyListFragment.newInstance("", ""));
     }
