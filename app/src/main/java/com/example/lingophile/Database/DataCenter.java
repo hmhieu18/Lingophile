@@ -15,7 +15,9 @@ public class DataCenter {
     public ArrayList<Lesson> getLessonArrayList() {
         return lessonArrayList;
     }
-
+    public void addLesson(Lesson lesson){
+        this.lessonArrayList.add(lesson);
+    }
     public void setLessonArrayList(ArrayList<Lesson> lessonArrayList) {
         this.lessonArrayList = lessonArrayList;
     }
