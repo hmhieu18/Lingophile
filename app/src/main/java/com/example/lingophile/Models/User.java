@@ -38,10 +38,25 @@ public class User {
 
     public Schedule getScheduleByLessonID(String lessonID) {
         for (LessonIDSchedule stringSchedulePair : lessonIDArrayList) {
-            if (stringSchedulePair.getLessonID() == lessonID)
+            if (stringSchedulePair.getLessonID().equals(lessonID))
                 return stringSchedulePair.getSchedule();
         }
         return null;
+    }
+
+    public boolean containLessonID(String lessonID) {
+        for (LessonIDSchedule stringSchedulePair : lessonIDArrayList) {
+            if (stringSchedulePair.getLessonID().equals(lessonID))
+                return true;
+        }
+        return false;
+    }
+
+    public void removeLessonIDScheduleByID(String lessonID) {
+        for (LessonIDSchedule lessonIDSchedule : lessonIDArrayList) {
+            if (lessonIDSchedule.getLessonID().equals(lessonID))
+                lessonIDArrayList.remove(lessonIDSchedule);
+        }
     }
 
     public void setScheduleByLessonID(String lessonID, Schedule schedule) {

@@ -1,11 +1,8 @@
 package com.example.lingophile.Views;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -13,19 +10,21 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.example.lingophile.Adapter.SmallFlashCardListAdapter;
 import com.example.lingophile.Database.DataCenter;
 import com.example.lingophile.Models.Lesson;
 import com.example.lingophile.R;
 
-import java.util.Objects;
-
 public class LessonViewActivity extends AppCompatActivity {
     private DataCenter dataCenter = DataCenter.getInstance();
     private Lesson lesson;
     private RatingBar ratingbar;
-    private TextView lessonTitleTextView, topicTextView, authorTextView, numberOfCardTextView;
-    Button flashcardBtn, editBtn, testBtn, addToMyList;
+    Button flashcardBtn, editBtn, testBtn, addToMyListBtn;
+    private TextView lessonTitleTextView, topicTextView, authorTextView, numberOfCardTextView, addToMyListTextView;
     private ListView flashcardListView;
     private SmallFlashCardListAdapter smallFlashCardListAdapter;
 
@@ -52,13 +51,13 @@ public class LessonViewActivity extends AppCompatActivity {
         flashcardBtn = findViewById(R.id.flashCardBtn);
         editBtn = findViewById(R.id.EditBtn);
         testBtn = findViewById(R.id.TestBtn);
-        addToMyList = findViewById(R.id.addToMyListBtn);
+        addToMyListBtn = findViewById(R.id.addToMyListBtn);
         ratingbar = findViewById(R.id.rating);
         lessonTitleTextView = findViewById(R.id.LessonName);
         authorTextView = findViewById(R.id.authorName);
         topicTextView = findViewById(R.id.topic);
         numberOfCardTextView = findViewById(R.id.numberOfCard);
-
+        addToMyListTextView = findViewById(R.id.addToMyListTextView);
         flashcardListView = findViewById(R.id.flashcardListView);
         smallFlashCardListAdapter = new SmallFlashCardListAdapter(this, R.layout.small_flashcard_item, lesson.getFlashCardArrayList());
         flashcardListView.setAdapter(smallFlashCardListAdapter);
@@ -73,6 +72,25 @@ public class LessonViewActivity extends AppCompatActivity {
         topicTextView.setText(lesson.getDescription());
         numberOfCardTextView.setText(Integer.toString(lesson.getFlashCardArrayList().size()));
         ratingbar.setRating(lesson.getRating());
+        if (dataCenter.user.containLessonID(lesson.getLessonID())) {
+            addToMyListBtn.setEnabled(false);
+//            addToMyListBtn.setback();
+            addToMyListTextView.setText("Added to your list");
+        } else {
+            addToMyListBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openFragment(EditScheduleFragment.newInstance(lesson));
+                }
+            });
+        }
+    }
+
+    public void openFragment(Fragment fragment) {
+        FragmentTransaction transaction = LessonViewActivity.this.getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     private ListView.OnItemClickListener listViewItemOnClick = new ListView.OnItemClickListener() {
@@ -83,4 +101,6 @@ public class LessonViewActivity extends AppCompatActivity {
             LessonViewActivity.this.startActivity(myIntent);
         }
     };
+
+
 }

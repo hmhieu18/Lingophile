@@ -1,16 +1,27 @@
 package com.example.lingophile.Database;
 
-import android.os.Parcelable;
-import android.widget.ArrayAdapter;
-
 import com.example.lingophile.Models.Lesson;
 import com.example.lingophile.Models.User;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.mlkit.nl.translate.TranslateLanguage;
+import com.google.mlkit.nl.translate.Translation;
+import com.google.mlkit.nl.translate.Translator;
+import com.google.mlkit.nl.translate.TranslatorOptions;
 
 import java.util.ArrayList;
 
 public class DataCenter {
     private FirebaseManagement firebaseManagement = FirebaseManagement.getInstance();
+    private TranslatorOptions options =
+            new TranslatorOptions.Builder()
+                    .setSourceLanguage(TranslateLanguage.ENGLISH)
+                    .setTargetLanguage(TranslateLanguage.VIETNAMESE)
+                    .build();
+    private final Translator englishToVietnameseTranslator =
+            Translation.getClient(options);
+
+    public Translator getEnglishToVietnameseTranslator() {
+        return englishToVietnameseTranslator;
+    }
 
     public ArrayList<Lesson> getLessonArrayList() {
         return lessonArrayList;
@@ -65,10 +76,12 @@ public class DataCenter {
 
 
     private ArrayList<User> userArrayList = new ArrayList<>();
-    public ArrayList<User> getUserArrayList(){
+
+    public ArrayList<User> getUserArrayList() {
         return userArrayList;
     }
-    public void setUserArrayList(ArrayList<User> arrayList){
+
+    public void setUserArrayList(ArrayList<User> arrayList) {
         this.userArrayList = arrayList;
     }
 

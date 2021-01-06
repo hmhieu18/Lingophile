@@ -1,14 +1,16 @@
 package com.example.lingophile.Views;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -16,16 +18,10 @@ import com.example.lingophile.Adapter.MyLessonListAdapter;
 import com.example.lingophile.Database.DataCenter;
 import com.example.lingophile.Database.FirebaseManagement;
 import com.example.lingophile.Helper.ReadDataListener;
+import com.example.lingophile.Helper.ReminderHelper;
 import com.example.lingophile.Models.Lesson;
-import com.example.lingophile.Models.LessonIDSchedule;
-import com.example.lingophile.Models.Schedule;
 import com.example.lingophile.R;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class MyListFragment extends Fragment {
@@ -72,6 +68,13 @@ public class MyListFragment extends Fragment {
             Objects.requireNonNull(getActivity()).startActivity(myIntent);
         }
     };
+    private ListView.OnItemLongClickListener listViewItemOnLongClick = new ListView.OnItemLongClickListener() {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+            showOptionDialog(getContext(), i);
+            return true;
+        }
+    };
 
     private void initComponent(View view) {
         myListListView = view.findViewById(R.id.lessonListview);
@@ -102,6 +105,8 @@ public class MyListFragment extends Fragment {
             }
         });
         myListListView.setOnItemClickListener(itemClickListener);
+        myListListView.setOnItemLongClickListener(listViewItemOnLongClick);
+
     }
 
     public void openFragment(Fragment fragment) {
@@ -114,5 +119,46 @@ public class MyListFragment extends Fragment {
     private void refreshListView() {
         myLessonListAdapter = new MyLessonListAdapter(getContext(), R.layout.lesson_item, dataCenter.getThisUserLessonArrayList());
         myListListView.setAdapter(myLessonListAdapter);
+    }
+
+    private void showOptionDialog(final Context context, final int position) {
+        final CharSequence[] options = {"Remove this lesson", "Cancel"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Option");
+
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (options[item].equals("Remove this lesson")) {
+                    getWarningDialog(position).show();
+                } else if (options[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void removeLessonByID(int position) {
+        ReminderHelper.deleteEvent(Objects.requireNonNull(getActivity()), dataCenter.user.getLessonIDArrayList().get(position).getSchedule().eventID);
+        dataCenter.user.getLessonIDArrayList().remove(position);
+        firebaseManagement.updateUserLessonList();
+        dataCenter.getThisUserLessonArrayList().remove(position);
+        refreshListView();
+    }
+
+    private AlertDialog.Builder getWarningDialog(final int position) {
+        return new AlertDialog.Builder(Objects.requireNonNull(getContext()))
+                .setTitle("Remove lesson")
+                .setMessage("Are you sure to remove this lesson?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        removeLessonByID(position);
+                    }
+                })
+                .setNegativeButton("No", null)
+                .setIcon(android.R.drawable.ic_dialog_alert);
     }
 }

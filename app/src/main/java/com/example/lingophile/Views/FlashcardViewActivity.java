@@ -1,9 +1,5 @@
 package com.example.lingophile.Views;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
-
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +12,10 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.example.lingophile.Adapter.CardFragmentPagerAdapter;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+
 import com.example.lingophile.Adapter.CardPagerAdapter;
 import com.example.lingophile.Adapter.ShadowTransformer;
 import com.example.lingophile.Models.FlashCard;
@@ -25,6 +24,8 @@ import com.example.lingophile.R;
 
 import java.util.ArrayList;
 import java.util.Locale;
+
+//import com.example.lingophile.Adapter.CardFragmentPagerAdapter;
 
 public class FlashcardViewActivity extends AppCompatActivity implements View.OnClickListener,
         CompoundButton.OnCheckedChangeListener {
@@ -36,7 +37,7 @@ public class FlashcardViewActivity extends AppCompatActivity implements View.OnC
     private TextView listenText;
     private CardPagerAdapter mCardAdapter;
     private ShadowTransformer mCardShadowTransformer;
-    private CardFragmentPagerAdapter mFragmentCardAdapter;
+    //    private CardFragmentPagerAdapter mFragmentCardAdapter;
     private ShadowTransformer mFragmentCardShadowTransformer;
     private TextToSpeech mText2Speech;
     private boolean mIsText2SpeechReady = false;
@@ -75,11 +76,11 @@ public class FlashcardViewActivity extends AppCompatActivity implements View.OnC
         for (FlashCard flashCard : lesson.getFlashCardArrayList()) {
             mCardAdapter.addCardItem(flashCard);
         }
-        mFragmentCardAdapter = new CardFragmentPagerAdapter(getSupportFragmentManager(),
-                dpToPixels(2, this));
+//        mFragmentCardAdapter = new CardFragmentPagerAdapter(getSupportFragmentManager(),
+//                dpToPixels(2, this));
 
         mCardShadowTransformer = new ShadowTransformer(mViewPager, mCardAdapter);
-        mFragmentCardShadowTransformer = new ShadowTransformer(mViewPager, mFragmentCardAdapter);
+//        mFragmentCardShadowTransformer = new ShadowTransformer(mViewPager, mFragmentCardAdapter);
 
         mViewPager.setAdapter(mCardAdapter);
         mViewPager.setPageTransformer(false, mCardShadowTransformer);

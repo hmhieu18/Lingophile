@@ -1,9 +1,7 @@
 package com.example.lingophile.Views;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,10 +12,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.example.lingophile.Adapter.MyLessonListAdapter;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.example.lingophile.Adapter.SmallFlashCardListAdapter;
 import com.example.lingophile.Database.DataCenter;
-import com.example.lingophile.Database.FirebaseManagement;
 import com.example.lingophile.Models.FlashCard;
 import com.example.lingophile.Models.Lesson;
 import com.example.lingophile.R;
@@ -31,7 +31,7 @@ public class NewLessonFragment extends Fragment implements FlashcardInputDialog.
     public static ArrayList<FlashCard> flashCardArrayList = new ArrayList<>();
     private ListView flashcardListView;
     public static SmallFlashCardListAdapter smallFlashCardListAdapter;
-    private DataCenter dataCenter=DataCenter.getInstance();
+    private DataCenter dataCenter = DataCenter.getInstance();
 
 
     public NewLessonFragment() {
@@ -69,26 +69,13 @@ public class NewLessonFragment extends Fragment implements FlashcardInputDialog.
             openDialog(position);
         }
     };
-    private ListView.OnItemLongClickListener itemLongClickListener = new ListView.OnItemLongClickListener() {
+    private ListView.OnItemLongClickListener listViewItemOnLongClick = new ListView.OnItemLongClickListener() {
         @Override
         public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-            return false;
+            showOptionDialog(getContext(), i);
+            return true;
         }
     };
-
-    private void initComponent(View view) {
-        descriptionEditText = view.findViewById(R.id.descriptionEditText);
-        titleEditText = view.findViewById(R.id.titleEditText);
-        flashcardListView = view.findViewById(R.id.flashcardListView);
-        addBtn = view.findViewById(R.id.newFlashcradBtn);
-        addBtn.setOnClickListener(addClick);
-        nextBtn = view.findViewById(R.id.nextBtn);
-        nextBtn.setOnClickListener(nextClick);
-        smallFlashCardListAdapter = new SmallFlashCardListAdapter(getContext(), R.layout.small_flashcard_item, flashCardArrayList);
-        flashcardListView.setAdapter(smallFlashCardListAdapter);
-        flashcardListView.setOnItemClickListener(itemClickListener);
-        flashcardListView.setOnItemLongClickListener(itemLongClickListener);
-    }
 
     public void openFragment(Fragment fragment) {
         FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
@@ -117,18 +104,59 @@ public class NewLessonFragment extends Fragment implements FlashcardInputDialog.
         }
     };
 
-    public void openDialog(int position) {
-
-        Bundle args = new Bundle();
-        args.putInt("position", position);
-        FlashcardInputDialog flashcardInputDialog = new FlashcardInputDialog();
-        flashcardInputDialog.setArguments(args);
-        flashcardInputDialog.show(getChildFragmentManager(), Integer.toString(position));
+    private void initComponent(View view) {
+        descriptionEditText = view.findViewById(R.id.descriptionEditText);
+        titleEditText = view.findViewById(R.id.titleEditText);
+        flashcardListView = view.findViewById(R.id.flashcardListView);
+        addBtn = view.findViewById(R.id.newFlashcradBtn);
+        addBtn.setOnClickListener(addClick);
+        nextBtn = view.findViewById(R.id.nextBtn);
+        nextBtn.setOnClickListener(nextClick);
+        smallFlashCardListAdapter = new SmallFlashCardListAdapter(getContext(), R.layout.small_flashcard_item, flashCardArrayList);
+        flashcardListView.setAdapter(smallFlashCardListAdapter);
+        flashcardListView.setOnItemClickListener(itemClickListener);
+        flashcardListView.setOnItemLongClickListener(listViewItemOnLongClick);
     }
 
     @Override
     public void applyTexts(int position, String word, String meaning) {
         flashCardArrayList.get(position).setWord(word);
         flashCardArrayList.get(position).setMeaning(meaning);
+    }
+
+    public void openDialog(int position) {
+
+        Bundle args = new Bundle();
+        args.putInt("position", position);
+        args.putString("word", flashCardArrayList.get(position).getWord());
+        args.putString("meaning", flashCardArrayList.get(position).getMeaning());
+        FlashcardInputDialog flashcardInputDialog = new FlashcardInputDialog();
+        flashcardInputDialog.setArguments(args);
+        flashcardInputDialog.show(getChildFragmentManager(), Integer.toString(position));
+    }
+
+    private void showOptionDialog(final Context context, final int position) {
+        final CharSequence[] options = {"Remove this card", "Cancel"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Option");
+
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (options[item].equals("Remove this card")) {
+                    removeFlashcardByPosition(position);
+                } else if (options[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void removeFlashcardByPosition(int position) {
+        flashCardArrayList.remove(position);
+        smallFlashCardListAdapter.notifyDataSetChanged();
     }
 }
