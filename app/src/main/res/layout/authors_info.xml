@@ -12,6 +12,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp">
         <ImageView
+            android:id="@+id/author_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_launcher"
@@ -121,5 +122,6 @@
     </LinearLayout>
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:id="@+id/author_info_list"/>
 </LinearLayout>

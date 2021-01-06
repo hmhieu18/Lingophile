@@ -68,6 +68,7 @@ public class ReminderHelper {
             values.put("event_id", Long.parseLong(event.getLastPathSegment()));
             values.put("method", 1);
             values.put("minutes", 10);
+            Log.d("@@@", cr.toString() + "-" + values.toString() + "-" + REMINDERS_URI.toString());
             cr.insert(REMINDERS_URI, values);
             return Long.parseLong(event.getLastPathSegment());
         }

@@ -2,6 +2,7 @@ package com.example.lingophile.Database;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
@@ -170,6 +171,8 @@ public class FirebaseManagement {
                 if (snapshot.exists()) {
                     ArrayList<Pair<Float, Lesson>> arrayList = new ArrayList<>();
                     for (DataSnapshot lesson : snapshot.getChildren()) {
+                        if (lesson.child("_private").getValue(Boolean.TYPE))
+                            continue;
                         String title = lesson.child("title").getValue().toString();
                         String des = lesson.child("description").getValue().toString();
                         float match_title = matching(search, title);
@@ -243,7 +246,7 @@ public class FirebaseManagement {
 
 
     private float matching(String x, String y) {
-        if (y.length() == 0)
+        if (Math.min(x.length(), y.length()) == 0)
             return 0;
         int rows = x.length() + 1;
         int cols = y.length() + 1;
@@ -337,5 +340,54 @@ public class FirebaseManagement {
             }
         });
     }
+
+    public void getLessonListByUserID(String userID, final ReadDataListener mRead){
+        mRead.onStart();
+        DatabaseReference ref = myRef.child("users").child(userID).child("lessons_list");
+        dataCenter.setLessonArrayList(new ArrayList<Lesson>());
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot data : snapshot.getChildren()) {
+                        loadLessonByID(data.child("lessonID").getValue(String.class), new ReadDataListener() {
+                            @Override
+                            public void onStart() {
+
+                            }
+
+                            @Override
+                            public void onFinish() {
+
+                            }
+
+                            @Override
+                            public void onFail() {
+
+                            }
+
+                            @Override
+                            public void updateUI() {
+
+                            }
+
+                            @Override
+                            public void onListenLessonSuccess(Lesson lesson) {
+                                dataCenter.addLesson(lesson);
+                                mRead.onFinish();
+                                //Log.d("@@@", dataCenter.getLessonArrayList().toString());
+                            }
+                        });
+                    }
+
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
 
 }

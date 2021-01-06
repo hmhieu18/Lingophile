@@ -1,16 +1,19 @@
 package com.example.lingophile.Views;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -73,13 +76,34 @@ public class SearchFragment extends Fragment {
         listView = view.findViewById(R.id.list_search);
         search.setOnClickListener(searchListener);
         spinner = view.findViewById(R.id.spinner);
+        listView.setOnItemClickListener(itemClickListenerLesson);
     }
+
     public void openFragment(Fragment fragment) {
         FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
+    private ListView.OnItemClickListener itemClickListenerLesson = new ListView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            Intent intent = null;
+            if (listView.getAdapter().equals(mUserAdater)){
+                //Search User
+                intent = new Intent(getActivity(), UserInfoActivity.class);
+                intent.putExtra("author", arrayListUser.get(i));
+            } else {
+                //Search lesson
+                intent = new Intent(getActivity(), LessonViewActivity.class);
+                intent.putExtra("lesson", arrayListLesson.get(i));
+            }
+            Objects.requireNonNull(getActivity()).startActivity(intent);
+        }
+    };
+
+
 
     View.OnClickListener searchListener = new View.OnClickListener() {
         @Override
