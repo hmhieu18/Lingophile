@@ -26,6 +26,15 @@ public class QuizCardPagerAdapter extends PagerAdapter implements CardAdapter {
     private List<CardView> mViews;
     private List<QuizCard> mData;
     private float mBaseElevation;
+
+    public int getNumberOfCorrect() {
+        return numberOfCorrect;
+    }
+
+    public void setNumberOfCorrect(int numberOfCorrect) {
+        this.numberOfCorrect = numberOfCorrect;
+    }
+
     private int numberOfCorrect = 0;
     private Activity activity;
 
@@ -102,9 +111,15 @@ public class QuizCardPagerAdapter extends PagerAdapter implements CardAdapter {
         optionA.setText(item.getOptions().get(0));
         optionB.setText(item.getOptions().get(1));
         optionC.setText(item.getOptions().get(2));
+
+        optionA.setBackgroundTintList(null);
+        optionB.setBackgroundTintList(null);
+        optionC.setBackgroundTintList(null);
+
+
         optionA.setOnClickListener(getListener(item, optionA, optionB, optionC));
         optionB.setOnClickListener(getListener(item, optionA, optionB, optionC));
-        optionB.setOnClickListener(getListener(item, optionA, optionB, optionC));
+        optionC.setOnClickListener(getListener(item, optionA, optionB, optionC));
     }
 
     private View.OnClickListener getListener(final QuizCard item, final Button optionA, final Button optionB, final Button optionC) {
@@ -123,19 +138,27 @@ public class QuizCardPagerAdapter extends PagerAdapter implements CardAdapter {
                     buttonDrawable = DrawableCompat.wrap(buttonDrawable);
                     DrawableCompat.setTint(buttonDrawable, Color.RED);
                     a.setBackground(buttonDrawable);
-                    if (optionA.getText() == item.getFlashCard().getMeaning())
+                    if (optionA.getText() == item.getFlashCard().getMeaning()) {
+                        a = optionA;
                         buttonDrawable = optionA.getBackground();
+                    }
 
-                    if (optionB.getText() == item.getFlashCard().getMeaning())
+                    if (optionB.getText() == item.getFlashCard().getMeaning()) {
+                        a = optionB;
                         buttonDrawable = optionB.getBackground();
-
-                    if (optionC.getText() == item.getFlashCard().getMeaning())
+                    }
+                    if (optionC.getText() == item.getFlashCard().getMeaning()) {
+                        a = optionC;
                         buttonDrawable = optionC.getBackground();
+                    }
 
                     buttonDrawable = DrawableCompat.wrap(buttonDrawable);
                     DrawableCompat.setTint(buttonDrawable, Color.GREEN);
                     a.setBackground(buttonDrawable);
                 }
+                optionA.setEnabled(false);
+                optionB.setEnabled(false);
+                optionC.setEnabled(false);
             }
         };
     }

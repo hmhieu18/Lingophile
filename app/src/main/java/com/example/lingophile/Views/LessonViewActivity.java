@@ -1,6 +1,7 @@
 package com.example.lingophile.Views;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -11,6 +12,7 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -21,6 +23,8 @@ import com.example.lingophile.Database.FirebaseManagement;
 import com.example.lingophile.Models.Lesson;
 import com.example.lingophile.R;
 
+import java.util.Objects;
+
 public class LessonViewActivity extends AppCompatActivity implements StarRatingDialog.RatingDialogListener {
     private DataCenter dataCenter = DataCenter.getInstance();
     private Lesson lesson;
@@ -30,6 +34,7 @@ public class LessonViewActivity extends AppCompatActivity implements StarRatingD
     private ListView flashcardListView;
     private SmallFlashCardListAdapter smallFlashCardListAdapter;
     private FirebaseManagement fm = FirebaseManagement.getInstance();
+    private int QUIZRESULT = 23;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +74,7 @@ public class LessonViewActivity extends AppCompatActivity implements StarRatingD
             public void onClick(View view) {
                 Intent myIntent = new Intent(LessonViewActivity.this, QuizViewActivity.class);
                 myIntent.putExtra("lesson", lesson); //Optional parameters
-                LessonViewActivity.this.startActivity(myIntent);
+                LessonViewActivity.this.startActivityForResult(myIntent, QUIZRESULT);
             }
         });
         lessonTitleTextView = findViewById(R.id.LessonName);
@@ -134,5 +139,31 @@ public class LessonViewActivity extends AppCompatActivity implements StarRatingD
         lesson.setRating(Math.min((float) (lesson.getRating() + 0.5 * (lesson.getRating() - rating)), 5));
         fm.addLessonByID(lesson);
         ratingbar.setRating(lesson.getRating());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == QUIZRESULT) {
+            if (resultCode == RESULT_OK) {
+                String result = data.getStringExtra("result");
+                getWarningDialog(Integer.parseInt(result), lesson.getFlashCardArrayList().size()).show();
+            }
+            if (resultCode == RESULT_CANCELED) {
+            }
+        }
+    }
+
+
+    private AlertDialog.Builder getWarningDialog(int result, int numberOfCard) {
+        return new AlertDialog.Builder(Objects.requireNonNull(this))
+                .setTitle("Quiz Result")
+                .setMessage("You got " + result + " out of " + numberOfCard)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert);
     }
 }

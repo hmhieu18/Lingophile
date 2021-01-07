@@ -111,7 +111,8 @@ public class QuizViewActivity extends AppCompatActivity {
         nextQuizButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mViewPager.getCurrentItem() < mCardAdapter.getCount())
+
+                if (mViewPager.getCurrentItem() < mCardAdapter.getCount() - 1)
                     mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
                 else {
                     quizFinish();
@@ -121,6 +122,9 @@ public class QuizViewActivity extends AppCompatActivity {
     }
 
     private void quizFinish() {
-
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("result", Integer.toString(mCardAdapter.getNumberOfCorrect()));
+        setResult(QuizViewActivity.RESULT_OK, returnIntent);
+        finish();
     }
 }
