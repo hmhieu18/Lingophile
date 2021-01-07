@@ -29,7 +29,6 @@ import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -172,7 +171,7 @@ public class MyListFragment extends Fragment {
 
     private void writeLesson(String userID, String lessonID, int position){
         Gson gson = new Gson();
-        String obj = gson.toJson(lessons.get(position)).toString();
+        String obj = gson.toJson(lessons.get(position));
         Log.d("@@@", obj);
         Writer output;
         File file = new File(getContext().getApplicationInfo().dataDir + "/" + userID + "_" + lessonID +".json");
@@ -203,8 +202,6 @@ public class MyListFragment extends Fragment {
                         text.append('\n');
                     }
                     br.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -1,23 +1,18 @@
 package com.example.lingophile.Views;
 
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import com.example.lingophile.Helper.ReminderHelper;
+import com.example.lingophile.Database.DataCenter;
 import com.example.lingophile.R;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,29 +77,29 @@ public class SettingsFragment extends Fragment {
 
     private void initComponent(View view) {
         _logOutButton = view.findViewById(R.id.settings_log_out_button);
-        _aboutUsButton =view.findViewById(R.id.settings_about_us_button);
+        _aboutUsButton = view.findViewById(R.id.settings_about_us_button);
         _changePasswordButton = view.findViewById(R.id.settings_change_password_button);
-        _viewProfileButton =view.findViewById(R.id.settings_profile_button);
-        LogOutButtonOnclickedListener();
+        _viewProfileButton = view.findViewById(R.id.settings_profile_button);
+        LogOutButtonOnclickListener();
     }
 
-    private void LogOutButtonOnclickedListener() {
+    private void LogOutButtonOnclickListener() {
         _logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                getWarningDialog().show();
                 FirebaseAuth.getInstance().signOut();
-                        Intent intent = new Intent(getActivity(), LoginActivity.class);
-                        startActivity(intent);
-                        //Make sure the user cannot go back
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
+                DataCenter.getInstance().destructor();
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+                //Make sure the user cannot go back
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             }
         });
     }
 
-    private void AboutUsButtonOnclickedListener()
-    {
+    private void AboutUsButtonOnclickedListener() {
         _aboutUsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -26,9 +26,20 @@ public class DataCenter {
     public ArrayList<Lesson> getLessonArrayList() {
         return lessonArrayList;
     }
-    public void addLesson(Lesson lesson){
+
+    public DataCenter(FirebaseManagement firebaseManagement, TranslatorOptions options, ArrayList<Lesson> lessonArrayList, ArrayList<Lesson> thisUserLessonArrayList, User user, ArrayList<User> userArrayList) {
+        this.firebaseManagement = firebaseManagement;
+        this.options = options;
+        this.lessonArrayList = lessonArrayList;
+        this.thisUserLessonArrayList = thisUserLessonArrayList;
+        this.user = user;
+        this.userArrayList = userArrayList;
+    }
+
+    public void addLesson(Lesson lesson) {
         this.lessonArrayList.add(lesson);
     }
+
     public void setLessonArrayList(ArrayList<Lesson> lessonArrayList) {
         this.lessonArrayList = lessonArrayList;
     }
@@ -87,4 +98,10 @@ public class DataCenter {
         this.userArrayList = arrayList;
     }
 
+    public void destructor() {
+        this.lessonArrayList = new ArrayList<>();
+        this.thisUserLessonArrayList = new ArrayList<>();
+        this.user = new User();
+        this.userArrayList = new ArrayList<>();
+    }
 }

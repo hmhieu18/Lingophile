@@ -59,7 +59,23 @@ public class LessonViewActivity extends AppCompatActivity implements StarRatingD
     @SuppressLint("ClickableViewAccessibility")
     private void initComponent() {
         flashcardBtn = findViewById(R.id.flashCardBtn);
+        flashcardBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(LessonViewActivity.this, FlashcardViewActivity.class);
+                myIntent.putExtra("lesson", lesson); //Optional parameters
+                LessonViewActivity.this.startActivity(myIntent);
+            }
+        });
         editBtn = findViewById(R.id.EditBtn);
+        editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(LessonViewActivity.this, MainActivity.class);
+                myIntent.putExtra("lesson", lesson);
+                LessonViewActivity.this.startActivity(myIntent);
+            }
+        });
         testBtn = findViewById(R.id.TestBtn);
         addToMyListBtn = findViewById(R.id.addToMyListBtn);
         ratingbar = findViewById(R.id.rating);
@@ -141,7 +157,7 @@ public class LessonViewActivity extends AppCompatActivity implements StarRatingD
 
     @Override
     public void updateRating(float rating) {
-        lesson.setRating(Math.min((float) (lesson.getRating() + 0.5 * (lesson.getRating() - rating)), 5));
+        lesson.setRating(Math.min((float) (lesson.getRating() + 0.5 * (rating - lesson.getRating())), 5));
         fm.addLessonByID(lesson);
         ratingbar.setRating(lesson.getRating());
     }

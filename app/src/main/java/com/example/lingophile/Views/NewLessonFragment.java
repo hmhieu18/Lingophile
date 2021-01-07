@@ -33,26 +33,45 @@ public class NewLessonFragment extends Fragment implements FlashcardInputDialog.
     private ListView flashcardListView;
     public static SmallFlashCardListAdapter smallFlashCardListAdapter;
     private DataCenter dataCenter = DataCenter.getInstance();
-
+    private Lesson lesson;
 
     public NewLessonFragment() {
-        // Required empty public constructor
     }
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    View.OnClickListener nextClick = new View.OnClickListener() {
+        public void onClick(View v) {
+            if (lesson == null)
+                lesson = new Lesson(dataCenter.user.getEmail(), descriptionEditText.getText().toString(),
+                        titleEditText.getText().toString(),
+                        flashCardArrayList);
+            else {
+                lesson.setFlashCardArrayList(flashCardArrayList);
+                lesson.setTitle(titleEditText.getText().toString());
+                lesson.setDescription(descriptionEditText.getText().toString());
+            }
+            Intent myIntent = new Intent(getContext(), EditScheduleActivity.class);
+            myIntent.putExtra("lesson", lesson);
+            Objects.requireNonNull(getContext()).startActivity(myIntent);
 
-    public static NewLessonFragment newInstance(String param1, String param2) {
+        }
+    };
+
+    public static NewLessonFragment newInstance(Lesson lesson) {
         NewLessonFragment fragment = new NewLessonFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable("lesson", lesson);
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            lesson = (Lesson) savedInstanceState.getSerializable("lesson");
+        } else {
+            assert getArguments() != null;
+            lesson = (Lesson) getActivity().getIntent().getSerializableExtra("lesson");
+        }
         super.onCreate(savedInstanceState);
     }
 
@@ -61,6 +80,8 @@ public class NewLessonFragment extends Fragment implements FlashcardInputDialog.
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_lesson, container, false);
         initComponent(view);
+        if (lesson != null)
+            loadOldLesson();
         return view;
     }
 
@@ -96,17 +117,12 @@ public class NewLessonFragment extends Fragment implements FlashcardInputDialog.
         }
     };
 
-    View.OnClickListener nextClick = new View.OnClickListener() {
-        public void onClick(View v) {
-            Lesson lesson = new Lesson(dataCenter.user.getEmail(), descriptionEditText.getText().toString(),
-                    titleEditText.getText().toString(),
-                    flashCardArrayList);
-            Intent myIntent = new Intent(getContext(), EditScheduleActivity.class);
-            myIntent.putExtra("lesson", lesson);
-            getContext().startActivity(myIntent);
-
-        }
-    };
+    private void loadOldLesson() {
+        titleEditText.setText(lesson.getTitle());
+        descriptionEditText.setText(lesson.getDescription());
+        flashCardArrayList = lesson.getFlashCardArrayList();
+        smallFlashCardListAdapter.notifyDataSetChanged();
+    }
 
     private void initComponent(View view) {
         descriptionEditText = view.findViewById(R.id.descriptionEditText);

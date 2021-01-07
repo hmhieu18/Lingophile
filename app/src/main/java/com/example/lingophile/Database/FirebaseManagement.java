@@ -277,6 +277,7 @@ public class FirebaseManagement {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<LessonIDSchedule> tempLessonList = new ArrayList<>();
+                final ArrayList<Lesson> lessonArrayList = new ArrayList<>();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     Log.v("@@@", "" + dataSnapshot1.getKey()); //displays the key for the node
                     String tempString = dataSnapshot1.child("lessonID").getValue(String.class);
@@ -284,10 +285,7 @@ public class FirebaseManagement {
                     LessonIDSchedule temp = new LessonIDSchedule(tempString, tempSchedule);   //gives the value for given keyname
                     System.out.println(temp.getLessonID());
                     tempLessonList.add(temp);
-                }
-                dataCenter.user.setLessonIDArrayList(tempLessonList);
-                for (LessonIDSchedule lessonIDSchedule : dataCenter.user.getLessonIDArrayList()) {
-                    loadLessonByID(lessonIDSchedule.getLessonID(), new ReadDataListener() {
+                    loadLessonByID(tempString, new ReadDataListener() {
                         @Override
                         public void onStart() {
 
@@ -310,17 +308,14 @@ public class FirebaseManagement {
 
                         @Override
                         public void onListenLessonSuccess(Lesson lesson) {
-                            for (Lesson lesson1 : dataCenter.getThisUserLessonArrayList()) {
-                                if (lesson1.getLessonID().equals(lesson.getLessonID())) {
-                                    mRead.updateUI();
-                                    return;
-                                }
-                            }
-                            dataCenter.getThisUserLessonArrayList().add(lesson);
+                            lessonArrayList.add(lesson);
+                            dataCenter.setThisUserLessonArrayList(lessonArrayList);
                             mRead.updateUI();
                         }
                     });
                 }
+                dataCenter.user.setLessonIDArrayList(tempLessonList);
+
             }
 
             @Override
@@ -345,7 +340,7 @@ public class FirebaseManagement {
         });
     }
 
-    public void getLessonListByUserID(String userID, final ReadDataListener mRead){
+    public void getLessonListByUserID(String userID, final ReadDataListener mRead) {
         mRead.onStart();
         DatabaseReference ref = myRef.child("users").child(userID).child("lessons_list");
         dataCenter.setLessonArrayList(new ArrayList<Lesson>());
@@ -386,6 +381,7 @@ public class FirebaseManagement {
 
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
