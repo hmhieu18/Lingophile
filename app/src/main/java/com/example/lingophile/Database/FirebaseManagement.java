@@ -1,7 +1,9 @@
 package com.example.lingophile.Database;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
@@ -81,8 +83,13 @@ public class FirebaseManagement {
 
                                 @Override
                                 public void onFinish() {
+                                    SharedPreferences sharedPreferences = activity.getSharedPreferences("ID", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putString("UserID", DataCenter.getInstance().user.getUserID());
+                                    editor.apply();
                                     Intent myIntent = new Intent(activity, MainActivity.class);
                                     activity.startActivity(myIntent);
+
                                 }
 
                                 @Override

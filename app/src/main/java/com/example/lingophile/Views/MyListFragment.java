@@ -3,7 +3,10 @@ package com.example.lingophile.Views;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +24,17 @@ import com.example.lingophile.Helper.ReadDataListener;
 import com.example.lingophile.Helper.ReminderHelper;
 import com.example.lingophile.Models.Lesson;
 import com.example.lingophile.R;
+import com.google.gson.Gson;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class MyListFragment extends Fragment {
@@ -29,7 +42,7 @@ public class MyListFragment extends Fragment {
     private ListView myListListView;
     private MyLessonListAdapter myLessonListAdapter;
     private DataCenter dataCenter = DataCenter.getInstance();
-
+    private ArrayList<Lesson> lessons;
 
     public MyListFragment() {
         // Required empty public constructor
@@ -52,10 +65,12 @@ public class MyListFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_list, container, false);
+
         initComponent(view);
         return view;
     }
@@ -78,32 +93,38 @@ public class MyListFragment extends Fragment {
 
     private void initComponent(View view) {
         myListListView = view.findViewById(R.id.lessonListview);
-        firebaseManagement.loadUserLessonIDList(new ReadDataListener() {
-            @Override
-            public void onStart() {
+        ConnectivityManager cm = (ConnectivityManager) getContext()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting())
+            firebaseManagement.loadUserLessonIDList(new ReadDataListener() {
+                @Override
+                public void onStart() {
 
-            }
+                }
 
-            @Override
-            public void onFinish() {
+                @Override
+                public void onFinish() {
 
-            }
+                }
 
-            @Override
-            public void onFail() {
+                @Override
+                public void onFail() {
 
-            }
+                }
 
-            @Override
-            public void updateUI() {
-                refreshListView();
-            }
+                @Override
+                public void updateUI() {
+                    refreshListView();
+                }
 
-            @Override
-            public void onListenLessonSuccess(Lesson lesson) {
+                @Override
+                public void onListenLessonSuccess(Lesson lesson) {
 
-            }
-        });
+                }
+            });
+        else
+            loadLesson(dataCenter.user.getUserID());
         myListListView.setOnItemClickListener(itemClickListener);
         myListListView.setOnItemLongClickListener(listViewItemOnLongClick);
 
@@ -117,15 +138,20 @@ public class MyListFragment extends Fragment {
     }
 
     private void refreshListView() {
-        myLessonListAdapter = new MyLessonListAdapter(getContext(), R.layout.lesson_item, dataCenter.getThisUserLessonArrayList());
+        ConnectivityManager cm = (ConnectivityManager) getContext()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting())
+            lessons = dataCenter.getThisUserLessonArrayList();
+        myLessonListAdapter = new MyLessonListAdapter(getContext(), R.layout.lesson_item, lessons);
         myListListView.setAdapter(myLessonListAdapter);
     }
 
     private void showOptionDialog(final Context context, final int position) {
-        final CharSequence[] options = {"Remove this lesson", "Cancel"};
+        final CharSequence[] options = {"Remove this lesson", "Download lesson", "Cancel"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Option");
+        builder.setTitle("Options");
 
         builder.setItems(options, new DialogInterface.OnClickListener() {
 
@@ -135,10 +161,58 @@ public class MyListFragment extends Fragment {
                     getWarningDialog(position).show();
                 } else if (options[item].equals("Cancel")) {
                     dialog.dismiss();
+                } else if (options[item].equals("Download lesson")){
+                    writeLesson(dataCenter.user.getUserID(), lessons.get(position).getLessonID(), position);
+                    dialog.dismiss();
                 }
             }
         });
         builder.show();
+    }
+
+    private void writeLesson(String userID, String lessonID, int position){
+        Gson gson = new Gson();
+        String obj = gson.toJson(lessons.get(position)).toString();
+        Log.d("@@@", obj);
+        Writer output;
+        File file = new File(getContext().getApplicationInfo().dataDir + "/" + userID + "_" + lessonID +".json");
+        try {
+            output = new BufferedWriter(new FileWriter(file));
+            output.write(obj);
+            output.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadLesson(String userID){
+        File dir = new File(getContext().getApplicationInfo().dataDir);
+        File[] listFile = dir.listFiles();
+        lessons = new ArrayList<>();
+        Gson gson = new Gson();
+        for (File x : listFile){
+            if (x.getName().contains(userID)){
+                StringBuilder text = new StringBuilder();
+
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader(x));
+                    String line;
+
+                    while ((line = br.readLine()) != null) {
+                        text.append(line);
+                        text.append('\n');
+                    }
+                    br.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                lessons.add(gson.fromJson(text.toString(), Lesson.class));
+            }
+        }
+        Log.d("@@@", lessons.toString());
+        refreshListView();
     }
 
     private void removeLessonByID(int position) {

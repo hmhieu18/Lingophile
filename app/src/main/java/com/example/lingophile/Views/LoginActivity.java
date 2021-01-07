@@ -4,17 +4,24 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.example.lingophile.Database.DataCenter;
 import com.example.lingophile.Database.FirebaseManagement;
 import com.example.lingophile.Helper.ReadDataListener;
 import com.example.lingophile.Models.Lesson;
+import com.example.lingophile.Models.User;
 import com.example.lingophile.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -24,41 +31,56 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (firebaseManagement.isLogin()) {
-            firebaseManagement.loadUser(
-                    new ReadDataListener() {
-                        ProgressDialog dialog;
+        ConnectivityManager cm = (ConnectivityManager) this
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()){
+            if (firebaseManagement.isLogin()) {
+                firebaseManagement.loadUser(
+                        new ReadDataListener() {
+                            ProgressDialog dialog;
 
-                        @Override
-                        public void onStart() {
-                            dialog = new ProgressDialog(LoginActivity.this);
-                            dialog.setMessage("Please wait...");
-                            dialog.show();
-                        }
+                            @Override
+                            public void onStart() {
+                                dialog = new ProgressDialog(LoginActivity.this);
+                                dialog.setMessage("Please wait...");
+                                dialog.show();
+                            }
 
-                        @Override
-                        public void onFinish() {
-                            if (dialog.isShowing())
-                                dialog.dismiss();
-                            onAuthSuccess();
-                        }
+                            @Override
+                            public void onFinish() {
+                                if (dialog.isShowing())
+                                    dialog.dismiss();
+                                onAuthSuccess();
+                            }
 
-                        @Override
-                        public void onFail() {
-                            if (dialog.isShowing())
-                                dialog.dismiss();
-                        }
+                            @Override
+                            public void onFail() {
+                                if (dialog.isShowing())
+                                    dialog.dismiss();
+                            }
 
-                        @Override
-                        public void updateUI() {
+                            @Override
+                            public void updateUI() {
 
-                        }
+                            }
 
-                        @Override
-                        public void onListenLessonSuccess(Lesson lesson) {
+                            @Override
+                            public void onListenLessonSuccess(Lesson lesson) {
 
-                        }
-                    });
+                            }
+                        });
+            }
+        } else {
+            SharedPreferences sharedPreferences = this.getSharedPreferences("ID", Context.MODE_PRIVATE);
+            String get = sharedPreferences.getString("UserID", "null");
+            if (!get.equals("null")){
+                User user = new User();
+                user.setUserID(get);
+                DataCenter.getInstance().setUser(user);
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                finish();
+            }
         }
     }
 
@@ -75,6 +97,10 @@ public class LoginActivity extends AppCompatActivity {
 //        String username = usernameFromEmail(user.getEmail());
 //        User mUser = new User(user.getUid(), "username", user.getEmail());
 //        DataCenter.user = mUser;
+        SharedPreferences sharedPreferences = this.getSharedPreferences("ID", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("UserID", DataCenter.getInstance().user.getUserID());
+        editor.apply();
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
         finish();
     }
