@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -72,9 +73,13 @@ public class LessonViewActivity extends AppCompatActivity implements StarRatingD
         testBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(LessonViewActivity.this, QuizViewActivity.class);
-                myIntent.putExtra("lesson", lesson); //Optional parameters
-                LessonViewActivity.this.startActivityForResult(myIntent, QUIZRESULT);
+                if (lesson.getFlashCardArrayList().size() >= 3) {
+                    Intent myIntent = new Intent(LessonViewActivity.this, QuizViewActivity.class);
+                    myIntent.putExtra("lesson", lesson); //Optional parameters
+                    LessonViewActivity.this.startActivityForResult(myIntent, QUIZRESULT);
+                } else {
+                    Toast.makeText(LessonViewActivity.this, "Lesson must have more than 3 flashcards", Toast.LENGTH_LONG).show();
+                }
             }
         });
         lessonTitleTextView = findViewById(R.id.LessonName);
