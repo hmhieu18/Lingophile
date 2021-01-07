@@ -16,7 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.lingophile.Adapter.CardPagerAdapter;
+import com.example.lingophile.Adapter.FlashcardPagerAdapter;
 import com.example.lingophile.Adapter.ShadowTransformer;
 import com.example.lingophile.Models.FlashCard;
 import com.example.lingophile.Models.Lesson;
@@ -35,7 +35,7 @@ public class FlashcardViewActivity extends AppCompatActivity implements View.OnC
     private Button speak;
     private Button hear;
     private TextView listenText;
-    private CardPagerAdapter mCardAdapter;
+    private FlashcardPagerAdapter mCardAdapter;
     private ShadowTransformer mCardShadowTransformer;
     //    private CardFragmentPagerAdapter mFragmentCardAdapter;
     private ShadowTransformer mFragmentCardShadowTransformer;
@@ -72,7 +72,7 @@ public class FlashcardViewActivity extends AppCompatActivity implements View.OnC
         mText2Speech.setLanguage(Locale.ENGLISH);
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
 
-        mCardAdapter = new CardPagerAdapter(this);
+        mCardAdapter = new FlashcardPagerAdapter(this);
         for (FlashCard flashCard : lesson.getFlashCardArrayList()) {
             mCardAdapter.addCardItem(flashCard);
         }

@@ -25,7 +25,7 @@ public class LessonViewActivity extends AppCompatActivity implements StarRatingD
     private DataCenter dataCenter = DataCenter.getInstance();
     private Lesson lesson;
     private RatingBar ratingbar;
-    Button flashcardBtn, editBtn, testBtn, addToMyListBtn;
+    private Button flashcardBtn, editBtn, testBtn, addToMyListBtn;
     private TextView lessonTitleTextView, topicTextView, authorTextView, numberOfCardTextView, addToMyListTextView;
     private ListView flashcardListView;
     private SmallFlashCardListAdapter smallFlashCardListAdapter;
@@ -62,6 +62,14 @@ public class LessonViewActivity extends AppCompatActivity implements StarRatingD
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 openDialog();
                 return false;
+            }
+        });
+        testBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(LessonViewActivity.this, QuizViewActivity.class);
+                myIntent.putExtra("lesson", lesson); //Optional parameters
+                LessonViewActivity.this.startActivity(myIntent);
             }
         });
         lessonTitleTextView = findViewById(R.id.LessonName);

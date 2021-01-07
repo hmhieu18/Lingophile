@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
@@ -17,16 +16,15 @@ import com.example.lingophile.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
+public class FlashcardPagerAdapter extends PagerAdapter implements CardAdapter {
 
     private List<CardView> mViews;
     private List<FlashCard> mData;
-    private List<Button> mButton;
     private float mBaseElevation;
 
     private Activity activity;
 
-    public CardPagerAdapter(Activity activity) {
+    public FlashcardPagerAdapter(Activity activity) {
         mData = new ArrayList<>();
         mViews = new ArrayList<>();
         this.activity = activity;
@@ -62,7 +60,7 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View view = LayoutInflater.from(container.getContext())
-                .inflate(R.layout.adapter, container, false);
+                .inflate(R.layout.flashcard_item, container, false);
         container.addView(view);
         bind(mData.get(position), view);
         CardView cardView = (CardView) view.findViewById(R.id.cardView);
