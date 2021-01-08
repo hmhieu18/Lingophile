@@ -85,10 +85,34 @@ public class SettingsFragment extends Fragment {
         _aboutUsButton =view.findViewById(R.id.settings_about_us_button);
         _changePasswordButton = view.findViewById(R.id.settings_change_password_button);
         _viewProfileButton =view.findViewById(R.id.settings_profile_button);
-        LogOutButtonOnclickedListener();
+        LogOutButtonOnclicked();
+        AboutUsButtonOnclicked();
+        ChangePasswordOnclicked();
+        ViewUserProfileOnclicked();
     }
 
-    private void LogOutButtonOnclickedListener() {
+    private void ViewUserProfileOnclicked() {
+        _viewProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),UserProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void ChangePasswordOnclicked() {
+        _changePasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                getWarningDialog().show();
+                Intent intent = new Intent(getActivity(), ChangePasswordActivity.class);
+              startActivity(intent);
+            }
+        });
+    }
+
+    private void LogOutButtonOnclicked() {
         _logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,12 +127,12 @@ public class SettingsFragment extends Fragment {
         });
     }
 
-    private void AboutUsButtonOnclickedListener()
+    private void AboutUsButtonOnclicked()
     {
         _aboutUsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AboutUsActivity.class);
+                Intent intent = new Intent(getActivity(),AboutUsActivity.class);
                 startActivity(intent);
             }
         });

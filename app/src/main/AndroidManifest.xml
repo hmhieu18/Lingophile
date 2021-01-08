@@ -22,12 +22,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Views.ChangePasswordActivity"></activity>
+        <activity android:name=".Views.AboutUsActivity"></activity>
+        <activity android:name=".Views.ChangePasswordActivity" />
         <activity android:name=".Views.UserProfileActivity" />
-        <activity
-            android:name=".Views.AboutUs"
-            android:label="@string/title_activity_about_us"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Views.EditScheduleActivity" />
         <activity android:name=".Views.FlashcardViewActivity" />
         <activity android:name=".Views.QuizViewActivity" />
