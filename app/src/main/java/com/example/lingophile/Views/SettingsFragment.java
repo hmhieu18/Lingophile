@@ -80,6 +80,13 @@ public class SettingsFragment extends Fragment {
         _aboutUsButton = view.findViewById(R.id.settings_about_us_button);
         _changePasswordButton = view.findViewById(R.id.settings_change_password_button);
         _viewProfileButton = view.findViewById(R.id.settings_profile_button);
+        _viewProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), MyProfileActivity.class);
+                startActivity(intent);
+            }
+        });
         LogOutButtonOnclickListener();
     }
 
