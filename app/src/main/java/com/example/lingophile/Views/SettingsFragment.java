@@ -117,7 +117,7 @@ public class SettingsFragment extends Fragment {
         _aboutUsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AboutUs.class);
+                Intent intent = new Intent(getActivity(), AboutUsActivity.class);
                 startActivity(intent);
             }
         });
