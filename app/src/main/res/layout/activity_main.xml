@@ -7,18 +7,35 @@
     tools:context=".Views.MainActivity"
     android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/fragmentName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/top"
+            android:fontFamily="@font/comfortaa"
+            android:text="Fragment Name"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/common_google_signin_btn_text_dark_default"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+
     <TextView
-        android:id="@+id/fragmentName"
+        android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/top"
+        android:background="@color/colorPrimary"
         android:fontFamily="@font/comfortaa"
-        android:text="Fragment Name"
+        android:text="Refresh"
         android:textAlignment="center"
         android:textAllCaps="false"
-        android:textColor="@color/common_google_signin_btn_text_dark_default"
-        android:textSize="24sp"
+        android:textColor="@color/common_google_signin_btn_text_dark"
+        android:textSize="14sp"
         android:textStyle="bold" />
+
+
+
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"

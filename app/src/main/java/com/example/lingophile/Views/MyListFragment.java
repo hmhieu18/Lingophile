@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
@@ -104,7 +105,7 @@ public class MyListFragment extends Fragment {
 
                 @Override
                 public void onFinish() {
-
+                    lessons = dataCenter.getThisUserLessonArrayList();
                 }
 
                 @Override
@@ -136,11 +137,15 @@ public class MyListFragment extends Fragment {
         transaction.commit();
     }
 
-    private void refreshListView() {
+    private boolean isConnected(){
         ConnectivityManager cm = (ConnectivityManager) getContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting())
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    private void refreshListView() {
+        if (isConnected())
             lessons = dataCenter.getThisUserLessonArrayList();
         myLessonListAdapter = new MyLessonListAdapter(getContext(), R.layout.lesson_item, lessons);
         myListListView.setAdapter(myLessonListAdapter);
@@ -163,6 +168,7 @@ public class MyListFragment extends Fragment {
                 } else if (options[item].equals("Download lesson")){
                     writeLesson(dataCenter.user.getUserID(), lessons.get(position).getLessonID(), position);
                     dialog.dismiss();
+
                 }
             }
         });
@@ -179,8 +185,10 @@ public class MyListFragment extends Fragment {
             output = new BufferedWriter(new FileWriter(file));
             output.write(obj);
             output.close();
+            Toast.makeText(getContext(), "Lesson downloaded!", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
+            Toast.makeText(getContext(), "Download lesson fail!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -213,12 +221,14 @@ public class MyListFragment extends Fragment {
     }
 
     private void removeLessonByID(int position) {
+        if (!isConnected())
+            return;
         ReminderHelper.deleteEvent(Objects.requireNonNull(getActivity()), dataCenter.user.getLessonIDArrayList().get(position).getSchedule().eventID);
         dataCenter.user.getLessonIDArrayList().remove(position);
         firebaseManagement.updateUserLessonList();
         dataCenter.getThisUserLessonArrayList().remove(position);
-        refreshListView();
     }
+
 
     private AlertDialog.Builder getWarningDialog(final int position) {
         return new AlertDialog.Builder(Objects.requireNonNull(getContext()))
@@ -226,7 +236,14 @@ public class MyListFragment extends Fragment {
                 .setMessage("Are you sure to remove this lesson?")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        File dfile = new File(getContext().getApplicationInfo().dataDir + "/" + dataCenter.user.getUserID() + "_" +
+                                lessons.get(position).getLessonID() +".json");
+                        if (dfile.exists())
+                            dfile.delete();
                         removeLessonByID(position);
+
+                        Toast.makeText(getContext(), "Lesson deleted!", Toast.LENGTH_SHORT).show();
+
                     }
                 })
                 .setNegativeButton("No", null)

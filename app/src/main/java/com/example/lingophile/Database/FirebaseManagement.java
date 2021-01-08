@@ -315,7 +315,7 @@ public class FirebaseManagement {
 
                         @Override
                         public void onFinish() {
-
+                            mRead.onFinish();
                         }
 
                         @Override

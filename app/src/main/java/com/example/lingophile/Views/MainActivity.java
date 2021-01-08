@@ -1,12 +1,22 @@
 package com.example.lingophile.Views;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GestureDetectorCompat;
+import androidx.core.view.MotionEventCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -16,6 +26,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity implements FlashcardInputDialog.ExampleDialogListener {
     private TextView fragmentName;
+    private GestureDetectorCompat mGestureDetector;
     BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -48,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements FlashcardInputDia
             };
     BottomNavigationView bottomNavigation;
     private Lesson lesson;
+    private TextView textRef;
 
     @Override
     public void onBackPressed() {
@@ -61,10 +73,26 @@ public class MainActivity extends AppCompatActivity implements FlashcardInputDia
         transaction.commit();
     }
 
+
     @SuppressLint("SetTextI18n")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);
+        fragmentName = findViewById(R.id.fragmentName);
+        bottomNavigation = findViewById(R.id.bottom_navigation);
+        textRef = findViewById(R.id.refresh);
+        textRef.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                initComponent(savedInstanceState);
+            }
+        });
+        initComponent(savedInstanceState);
+    }
+
+    private void initComponent(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
@@ -75,10 +103,15 @@ public class MainActivity extends AppCompatActivity implements FlashcardInputDia
         } else {
             lesson = (Lesson) savedInstanceState.getSerializable("lesson");
         }
-        setContentView(R.layout.activity_main);
-        fragmentName = findViewById(R.id.fragmentName);
-        bottomNavigation = findViewById(R.id.bottom_navigation);
-        bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+        if (isConnected()) {
+            textRef.setVisibility(View.INVISIBLE);
+            textRef.setHeight(0);
+            bottomNavigation.setVisibility(View.VISIBLE);
+            bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+        } else {
+            bottomNavigation.setVisibility(View.INVISIBLE);
+            textRef.setVisibility(View.VISIBLE);
+        }
         if (lesson == null) {
             bottomNavigation.setSelectedItemId(R.id.navigation_my_list);
             fragmentName.setText("My List");
@@ -95,5 +128,11 @@ public class MainActivity extends AppCompatActivity implements FlashcardInputDia
         NewLessonFragment.flashCardArrayList.get(position).setWord(word);
         NewLessonFragment.flashCardArrayList.get(position).setMeaning(meaning);
         NewLessonFragment.smallFlashCardListAdapter.notifyDataSetChanged();
+    }
+    private boolean isConnected(){
+        ConnectivityManager cm = (ConnectivityManager) this
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }
