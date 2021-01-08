@@ -28,31 +28,44 @@
             android:orientation="horizontal"
             android:layout_gravity="center_horizontal"
             android:weightSum="5">
-            <ImageView
+<!--            <ImageView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:src="@drawable/star_mid"-->
+<!--                android:layout_weight="1"/>-->
+<!--            <ImageView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:src="@drawable/star_mid"-->
+<!--                android:layout_weight="1"/>-->
+<!--            <ImageView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1"-->
+<!--                android:src="@drawable/star_mid" />-->
+<!--            <ImageView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1"-->
+<!--                android:src="@drawable/star_mid" />-->
+<!--            <ImageView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:src="@drawable/star_mid"-->
+<!--                android:layout_weight="1"/>-->
+            <RatingBar
+                android:id="@+id/user_info_rating"
+                style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/star_mid"
-                android:layout_weight="1"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/star_mid"
-                android:layout_weight="1"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/star_mid" />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/star_mid" />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/star_mid"
-                android:layout_weight="1"/>
+                android:layout_gravity="center"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:progressTint="#FFC107"
+                android:progressTintMode="src_in"
+                android:rating="5"
+                android:secondaryProgressTint="#FFEB3B"
+                android:stepSize="0.5" />
         </LinearLayout>
 
         <LinearLayout
@@ -70,15 +83,15 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/montserrat_bold"
                 android:textSize="15dp"
-                android:text="Full name"/>
+                android:text="Username"/>
+
             <TextView
+                android:id="@+id/user_info_username"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/montserrat"
-                android:hint="Calasue Nguyen"
-                android:id="@+id/author_info_fullname"
-                />
+                android:hint="Calasue Nguyen" />
         </LinearLayout>
 
         <LinearLayout
@@ -103,7 +116,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/montserrat"
                 android:hint="calasue@gmail.com"
-                android:id="@+id/author_info_email"
+                android:id="@+id/user_info_email"
                 />
         </LinearLayout>
 
