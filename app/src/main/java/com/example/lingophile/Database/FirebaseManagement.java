@@ -20,6 +20,7 @@ import com.example.lingophile.Models.User;
 import com.example.lingophile.Views.MainActivity;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -456,4 +457,21 @@ public class FirebaseManagement {
         });
     }
 
+    public void resetPassword(final ReadDataListener read, String email) {
+        mAuth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            read.onFinish();
+                        }
+                    }
+
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                read.onFail();
+            }
+        });
+    }
 }
