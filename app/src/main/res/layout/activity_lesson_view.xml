@@ -128,21 +128,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Flashcard" />
+            android:background="@drawable/flashcard_btn"
+            android:text="Flashcard"
+            android:textColor="#FFFFFF" />
 
         <Button
             android:id="@+id/EditBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Edit" />
+            android:background="@drawable/edit_btn"
+            android:text="Edit"
+            android:textColor="#FFFFFF" />
 
         <Button
             android:id="@+id/TestBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Test" />
+            android:background="@drawable/test_btn"
+            android:text="Test"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 
     <TextView

@@ -11,6 +11,10 @@ public class Lesson implements Serializable {
     private String authorName;
     private float rating = 5;
     private float percentage = 0;
+    private boolean _private = false;
+    private String description;
+    private String title;
+    private ArrayList<FlashCard> flashCardArrayList = new ArrayList<>();
 
     public boolean is_private() {
         return _private;
@@ -20,10 +24,6 @@ public class Lesson implements Serializable {
         this._private = _private;
     }
 
-    private boolean _private=false;
-    private String description;
-    private String title;
-    private ArrayList<FlashCard> flashCardArrayList = new ArrayList<>();
 
     public Lesson(String authorName, String description, String title, ArrayList<FlashCard> flashCardArrayList) {
         this.authorName = authorName;
