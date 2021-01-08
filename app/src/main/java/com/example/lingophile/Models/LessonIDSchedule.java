@@ -1,7 +1,6 @@
 package com.example.lingophile.Models;
 
 import java.lang.reflect.Field;
-import java.util.concurrent.ScheduledExecutorService;
 
 public class LessonIDSchedule {
     public LessonIDSchedule(String lessonID, Schedule schedule) {
@@ -18,12 +17,16 @@ public class LessonIDSchedule {
                     + resourceName + " / " + c, e);
         }
     }
+
     public String getLessonID() {
         return lessonID;
     }
 
     public void setLessonID(String lessonID) {
         this.lessonID = lessonID;
+    }
+
+    public LessonIDSchedule() {
     }
 
     public Schedule getSchedule() {

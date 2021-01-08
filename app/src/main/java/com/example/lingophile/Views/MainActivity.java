@@ -49,6 +49,11 @@ public class MainActivity extends AppCompatActivity implements FlashcardInputDia
     BottomNavigationView bottomNavigation;
     private Lesson lesson;
 
+    @Override
+    public void onBackPressed() {
+        return;
+    }
+
     public void openFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);

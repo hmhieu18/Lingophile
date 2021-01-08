@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
@@ -16,6 +18,7 @@ import com.example.lingophile.Models.LessonIDSchedule;
 import com.example.lingophile.Models.Schedule;
 import com.example.lingophile.Models.User;
 import com.example.lingophile.Views.MainActivity;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -26,7 +29,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -35,6 +43,16 @@ public class FirebaseManagement {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef;
     private DataCenter dataCenter = DataCenter.getInstance();
+    private StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
+
+    public StorageReference getmStorageRef() {
+        return mStorageRef;
+    }
+
+    public void setmStorageRef(StorageReference mStorageRef) {
+        this.mStorageRef = mStorageRef;
+    }
+
 
     public static void getLessonByID() {
     }
@@ -138,6 +156,10 @@ public class FirebaseManagement {
 
     public void writeNewUser(User user) {
         myRef.child("users").child(user.getUserID()).setValue(user);
+    }
+
+    public void updateUsername(String username) {
+        myRef.child("users").child(dataCenter.user.getUserID()).child("username").setValue(username);
     }
 
     public boolean isLogin() {
@@ -389,5 +411,49 @@ public class FirebaseManagement {
         });
     }
 
+    public void getAvatar() throws IOException {
+//        File localFile = File.createTempFile("images", "jpg");
+//        mStorageRef.getFile(localFile)
+//                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+//                    @Override
+//                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+//                        // Successfully downloaded data to local file
+//                        // ...
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                // Handle failed download
+//                // ...
+//            }
+//        });
+        // Reference to an image file in Cloud Storage
+
+    }
+
+    public void uploadAvatar(Bitmap image) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = mStorageRef.child("avatar").child(dataCenter.user.getUserID()).putBytes(data);
+
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+                return mStorageRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                }
+            }
+        });
+    }
 
 }
