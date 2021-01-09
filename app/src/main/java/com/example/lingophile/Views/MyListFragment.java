@@ -79,7 +79,7 @@ public class MyListFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Intent myIntent = new Intent(getActivity(), LessonViewActivity.class);
-            myIntent.putExtra("lesson", dataCenter.getThisUserLessonArrayList().get(position)); //Optional parameters
+            myIntent.putExtra("lesson", lessons.get(position)); //Optional parameters
             Objects.requireNonNull(getActivity()).startActivity(myIntent);
         }
     };
