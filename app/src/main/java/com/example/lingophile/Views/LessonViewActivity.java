@@ -132,9 +132,9 @@ public class LessonViewActivity extends AppCompatActivity implements StarRatingD
             });
         }
         if (!dataCenter.user.getEmail().equals(lesson.getAuthorName())) {
-            editBtn.setEnabled(false);
+            editBtn.setVisibility(View.GONE);
         } else {
-            editBtn.setEnabled(true);
+            editBtn.setVisibility(View.VISIBLE);
         }
     }
 
