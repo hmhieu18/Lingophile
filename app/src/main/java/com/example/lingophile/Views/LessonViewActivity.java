@@ -131,6 +131,11 @@ public class LessonViewActivity extends AppCompatActivity implements StarRatingD
                 }
             });
         }
+        if (!dataCenter.user.getEmail().equals(lesson.getAuthorName())) {
+            editBtn.setEnabled(false);
+        } else {
+            editBtn.setEnabled(true);
+        }
     }
 
     public void openFragment(Fragment fragment) {

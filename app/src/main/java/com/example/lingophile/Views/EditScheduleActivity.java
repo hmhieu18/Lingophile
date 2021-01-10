@@ -122,6 +122,7 @@ public class EditScheduleActivity extends AppCompatActivity {
         dataCenter.user.setScheduleByLessonID(currentLesson.getLessonID(), schedule);
         firebaseManagement.addLessonByID(currentLesson);
         firebaseManagement.updateUserLessonList();
+        NewLessonFragment.flashCardArrayList = new ArrayList<>();
         Intent myIntent = new Intent(EditScheduleActivity.this, MainActivity.class);
         EditScheduleActivity.this.startActivity(myIntent);
     }
