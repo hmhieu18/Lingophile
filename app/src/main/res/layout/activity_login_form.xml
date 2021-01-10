@@ -41,6 +41,7 @@
                     android:ems="10"
                     android:fontFamily="@font/montserrat_italic"
                     android:hint="someone@gmail.com"
+                    android:background="@null"
                     android:layout_gravity="center_horizontal"
                     android:inputType="textPersonName" />
             </LinearLayout>
@@ -62,6 +63,7 @@
                     android:ems="10"
                     android:fontFamily="@font/montserrat_italic"
                     android:hint="*********"
+                    android:background="@null"
                     android:layout_gravity="center_horizontal"
                     android:inputType="textPassword" />
             </LinearLayout>

@@ -144,7 +144,7 @@ public class SettingsFragment extends Fragment {
     private AlertDialog.Builder getWarningDialog() {
         return new AlertDialog.Builder(getContext())
                 .setTitle("Delete reminder")
-                .setMessage("Do you want to remove all of your watering reminder?")
+                .setMessage("Do you want to remove all of your reminders?")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         for (LessonIDSchedule p : DataCenter.getInstance().user.lessonIDArrayList) {
