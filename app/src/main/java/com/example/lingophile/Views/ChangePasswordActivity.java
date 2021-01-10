@@ -2,7 +2,10 @@ package com.example.lingophile.Views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.TransformationMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -104,7 +107,8 @@ public class ChangePasswordActivity extends AppCompatActivity {
         _confirm = findViewById(R.id.change_pass_confirm);
         _changePassButton = findViewById(R.id.change_pass_button);
         user = FirebaseAuth.getInstance().getCurrentUser();
+        _oldpass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        _newpass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        _confirm.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
     }
-
-
 }

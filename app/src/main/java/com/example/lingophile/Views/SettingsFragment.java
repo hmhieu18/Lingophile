@@ -1,6 +1,8 @@
 package com.example.lingophile.Views;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,8 +13,16 @@ import android.widget.Button;
 import androidx.fragment.app.Fragment;
 
 import com.example.lingophile.Database.DataCenter;
+import com.example.lingophile.Helper.ReminderHelper;
+import com.example.lingophile.Models.AppData;
+import com.example.lingophile.Models.Lesson;
+import com.example.lingophile.Models.LessonIDSchedule;
+import com.example.lingophile.Models.User;
 import com.example.lingophile.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserInfo;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -79,14 +89,13 @@ public class SettingsFragment extends Fragment {
         _logOutButton = view.findViewById(R.id.settings_log_out_button);
         _aboutUsButton = view.findViewById(R.id.settings_about_us_button);
         _changePasswordButton = view.findViewById(R.id.settings_change_password_button);
-        _changePasswordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), ChangePasswordActivity.class);
-                startActivity(intent);
-            }
-        });
         _viewProfileButton = view.findViewById(R.id.settings_profile_button);
+        ChangePasswordOnclicked();
+        ViewProfileOnclicked();
+        LogOutButtonOnclickListener();
+    }
+
+    private void ViewProfileOnclicked() {
         _viewProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,21 +103,30 @@ public class SettingsFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        LogOutButtonOnclickListener();
+    }
+
+    private void ChangePasswordOnclicked() {
+        _changePasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ChangePasswordActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void LogOutButtonOnclickListener() {
         _logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                getWarningDialog().show();
-                FirebaseAuth.getInstance().signOut();
-                DataCenter.getInstance().destructor();
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivity(intent);
-                //Make sure the user cannot go back
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                getWarningDialog().show();
+//                FirebaseAuth.getInstance().signOut();
+//                DataCenter.getInstance().destructor();
+//                Intent intent = new Intent(getActivity(), LoginActivity.class);
+//                startActivity(intent);
+//                //Make sure the user cannot go back
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                startActivity(intent);
             }
         });
     }
@@ -122,24 +140,26 @@ public class SettingsFragment extends Fragment {
             }
         });
     }
-//    private AlertDialog.Builder getWarningDialog() {
-//        return new AlertDialog.Builder(getContext())
-//                .setTitle("Delete reminder")
-//                .setMessage("Do you want to remove all of your watering reminder?")
-//                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        for (Plant p : AppData.user.userPlants) {
-//                            ReminderHelper.deleteEvent(Objects.requireNonNull(getActivity()), p.wateringSchedule.eventID);
-//                        }
-//                        FirebaseAuth.getInstance().signOut();
-//                        Intent intent = new Intent(getActivity(), LoginActivity.class);
-//                        startActivity(intent);
-//                        //Make sure the user cannot go back
-//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                        startActivity(intent);
-//                    }
-//                })
-//                .setNegativeButton("No", null)
-//                .setIcon(android.R.drawable.ic_dialog_alert);
-//    }
+
+    private AlertDialog.Builder getWarningDialog() {
+        return new AlertDialog.Builder(getContext())
+                .setTitle("Delete reminder")
+                .setMessage("Do you want to remove all of your watering reminder?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        for (LessonIDSchedule p : DataCenter.getInstance().user.lessonIDArrayList) {
+                            ReminderHelper.deleteEvent(Objects.requireNonNull(getActivity()), p.schedule.eventID);
+                        }
+                        FirebaseAuth.getInstance().signOut();
+                        DataCenter.getInstance().destructor();
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                        startActivity(intent);
+                        //Make sure the user cannot go back
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("No", null)
+                .setIcon(android.R.drawable.ic_dialog_alert);
+    }
 }
